@@ -60,7 +60,7 @@ Please explain any questions you have and a member of staff will help you as soo
             del data["botusers"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
-            logchannel = ctx.guild.get_channel(929780807776759818)
+            logchannel = ctx.guild.get_channel(927304057931038800)
             sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
             async for message in ctx.channel.history(oldest_first = True):
                 print(f"{message.author}: {message.content}")
@@ -72,7 +72,7 @@ Please explain any questions you have and a member of staff will help you as soo
             os.remove(f"ticket-transcript-{ownerid}.txt")
             await ctx.channel.delete()
         elif ctx.component["custom_id"] == "verify":
-            role = ctx.guild.get_role(888171960054448178)
+            role = ctx.guild.get_role(926955604738707597)
             if role in ctx.author.roles:
                 await ctx.send("You are already verified", hidden=True)
             else:
