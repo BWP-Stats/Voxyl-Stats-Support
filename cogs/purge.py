@@ -34,15 +34,6 @@ class Purge(commands.Cog):
     )
     async def _purge(self, ctx:SlashContext, amount:int, member:discord.Member=None):
         if ctx.author.guild_permissions.kick_members == True:
-            with open("guilds.json") as f:
-                data = json.load(f)
-            if ctx.guild.id not in data["guilds"]:
-                data["guilds"].append(ctx.guild.id)
-                with open("guilds.json", "w") as f:
-                    json.dump(data, f)
-                dataa = {"prefix" : "c!", "logchannel" : 0, "spam" : 0, "spambypass" : 0}
-                with open (f"{ctx.guild.id}info.json", "w") as f:
-                    json.dump(dataa, f)
             if amount > 100:
                 await ctx.send("The purge amount cannot be over 100", hidden=True)
             elif amount <= 0:
