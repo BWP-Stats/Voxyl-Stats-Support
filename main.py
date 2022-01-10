@@ -26,7 +26,7 @@ for filename in os.listdir('./cogs'):
 
 @client.event
 async def on_ready():
-    print ("BWP Stats Ready")
+    print ("Voxyl Stats Support Ready")
 
     print(f"Logged in as {client.user}!")
 
