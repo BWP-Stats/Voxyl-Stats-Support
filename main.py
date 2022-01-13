@@ -52,4 +52,4 @@ async def on_ready():
 
 
 
-client.run("ODcxMzgwNzI0NzYxMTI0OTE0.YQaeig.r_j9txHTV_C64gKUntsy0UEmdig")
+client.run("TOKEN_HERE")
