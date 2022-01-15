@@ -53,11 +53,88 @@ Please explain any questions you have and a member of staff will help you as soo
                 await channel.send(embed=embed, components=[create_actionrow(*buttons)])
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
+        elif ctx.component["custom_id"] == "ovsup":
+            if ctx.author.id in data["ovusers"]:
+                await ctx.send("You already have a ticket of this type open. Please use that ticket instead of creating a new one", hidden=True)
+                return
+            else:
+                await ctx.defer(hidden=True)
+                data["ovusers"].append(ctx.author.id)
+                supcat = ctx.guild.get_channel(927304036078723122)
+                channel = await ctx.guild.create_text_channel(name=f"overlay-{ctx.author.id}", category=supcat)
+                channels = data["channels"]
+                channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "overlay"}
+                with open("ticketinfo.json", "w") as f:
+                    json.dump(data, f)
+                embed=discord.Embed(title="Overlay Support", description=f"""Welcome to your ticket {ctx.author.mention}
+                
+Please explain any questions you have and a member of staff will help you as soon as possible""")
+                buttons = [
+                    create_button(style=ButtonStyle.red, label="Close", custom_id="close")
+                ]
+                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+                await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
+        elif ctx.component["custom_id"] == "presup":
+            if ctx.author.id in data["premusers"]:
+                await ctx.send("You already have a ticket of this type open. Please use that ticket instead of creating a new one", hidden=True)
+                return
+            else:
+                await ctx.defer(hidden=True)
+                data["premusers"].append(ctx.author.id)
+                supcat = ctx.guild.get_channel(927304036078723122)
+                channel = await ctx.guild.create_text_channel(name=f"premium-{ctx.author.id}", category=supcat)
+                channels = data["channels"]
+                channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "premium"}
+                with open("ticketinfo.json", "w") as f:
+                    json.dump(data, f)
+                embed=discord.Embed(title="Premium Support", description=f"""Welcome to your ticket {ctx.author.mention}
+                
+Please explain any questions you have and a member of staff will help you as soon as possible""")
+                buttons = [
+                    create_button(style=ButtonStyle.red, label="Close", custom_id="close")
+                ]
+                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+                await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
+        elif ctx.component["custom_id"] == "otsup":
+            if ctx.author.id in data["otusers"]:
+                await ctx.send("You already have a ticket of this type open. Please use that ticket instead of creating a new one", hidden=True)
+                return
+            else:
+                await ctx.defer(hidden=True)
+                data["otusers"].append(ctx.author.id)
+                supcat = ctx.guild.get_channel(927304036078723122)
+                channel = await ctx.guild.create_text_channel(name=f"other-{ctx.author.id}", category=supcat)
+                channels = data["channels"]
+                channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "other"}
+                with open("ticketinfo.json", "w") as f:
+                    json.dump(data, f)
+                embed=discord.Embed(title="Other Support", description=f"""Welcome to your ticket {ctx.author.mention}
+                
+Please explain any questions you have and a member of staff will help you as soon as possible""")
+                buttons = [
+                    create_button(style=ButtonStyle.red, label="Close", custom_id="close")
+                ]
+                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+                await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
         elif ctx.component["custom_id"] == "close":
             ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
+            type = data["channels"][f"{ctx.channel.id}"]["type"]
             del data["channels"][f"{ctx.channel.id}"]
-            index = data["botusers"].index(ownerid)
-            del data["botusers"][index]
+            if type == "bot":
+                index = data["botusers"].index(ownerid)
+                del data["botusers"][index]
+            elif type == "overlay":
+                index = data["ovusers"].index(ownerid)
+                del data["ovusers"][index]
+            elif type == "premium":
+                index = data["premusers"].index(ownerid)
+                del data["premusers"][index]
+            elif type == "other":
+                index = data["otusers"].index(ownerid)
+                del data["otusers"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
             logchannel = ctx.guild.get_channel(927304057931038800)

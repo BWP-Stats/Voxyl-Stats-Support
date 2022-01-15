@@ -32,9 +32,10 @@ class createpanel(commands.Cog):
             embed = discord.Embed(title="Voxyl Stats Support", description="Please click the the button corresponding to what type of support you need")
             buttons = [
                 create_button(style=ButtonStyle.blue, label="Discord Bot Support", custom_id="dbsup"),
-                create_button(style=ButtonStyle.blue, label="Overlay Support", custom_id="ovsup", disabled=True),
+                create_button(style=ButtonStyle.blue, label="Overlay Support", custom_id="ovsup", disabled=False),
                 create_button(style=ButtonStyle.blue, label="Website Support", custom_id="websup", disabled=True),
-                create_button(style=ButtonStyle.blue, label="Other", custom_id="otsup", disabled=True),
+                create_button(style=ButtonStyle.blue, label="Premium Support", custom_id="presup", disabled=False),
+                create_button(style=ButtonStyle.blue, label="Other", custom_id="otsup", disabled=False),
             ]
             await channel.send(embed=embed, components=[create_actionrow(*buttons)])
 
