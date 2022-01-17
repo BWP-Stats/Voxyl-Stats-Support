@@ -48,7 +48,7 @@ ID: {member.id}""", colour=0x00FF00)
         em.set_author(name=member, icon_url=member.avatar_url)
         await channel.send(embed=em)
     @commands.Cog.listener()
-    async def on_member_leave(self, member):
+    async def on_member_remove(self, member):
         channel = self.client.get_channel(logchannel)
         em = discord.Embed(title=f"Member Left", description=f"""Tag: {member}
 Mention: {member.mention}
