@@ -34,8 +34,8 @@ class Events(commands.Cog):
         if not before.author.bot == True:
             channel = self.client.get_channel(logchannel)
             em = discord.Embed(title=f"Message editted in {before.channel}", description=f"\u200b", timestamp=before.created_at)
-            em.add_field(name="Before", value=f"{before[:2000]}")
-            em.add_field(name="After", value=f"{after[:2000]}")
+            em.add_field(name="Before", value=f"{before.content[:2000]}")
+            em.add_field(name="After", value=f"{after.content[:2000]}")
             em.set_author(name=before.author, icon_url=before.author.avatar_url)
             em.set_footer(text=f"{before.author.id}")
             await channel.send(embed=em)
