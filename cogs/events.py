@@ -25,7 +25,7 @@ class Events(commands.Cog):
     async def on_message_delete(self, message):
         if not message.author.bot == True:
             channel = self.client.get_channel(logchannel)
-            em = discord.Embed(title=f"Message deleted in {message.channel}", description=f"""Message Content: {message.content}""", timestamp=message.created_at)
+            em = discord.Embed(title=f"Message deleted in {message.channel.mention}", description=f"""Message Content: {message.content}""", timestamp=message.created_at)
             em.set_author(name=message.author, icon_url=message.author.avatar_url)
             em.set_footer(text=f"{message.author.id}")
             await channel.send(embed=em)
@@ -33,9 +33,9 @@ class Events(commands.Cog):
     async def on_message_edit(self, before, after):
         if not before.author.bot == True:
             channel = self.client.get_channel(logchannel)
-            em = discord.Embed(title=f"Message editted in {before.channel}", description=f"\u200b", timestamp=before.created_at)
-            em.add_field(name="Before", value=f"{before.content[:2000]}")
-            em.add_field(name="After", value=f"{after.content[:2000]}")
+            em = discord.Embed(title=f"Message editted in {before.channel.mention}", description=f"\u200b", timestamp=before.created_at)
+            em.add_field(name="Before", value=f"{before.content[:1000]}")
+            em.add_field(name="After", value=f"{after.content[:1000]}")
             em.set_author(name=before.author, icon_url=before.author.avatar_url)
             em.set_footer(text=f"{before.author.id}")
             await channel.send(embed=em)
