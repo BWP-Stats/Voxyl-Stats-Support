@@ -1,6 +1,8 @@
 # Voxyl-Stats-Support
 The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 
+<br/>
+
 ## Voxyl Stats Links:
 
 > - [Discord Bot Invite](https://discord.com/api/oauth2/authorize?client_id=926814210321707028&permissions=277025442816&scope=bot%20applications.commands)  
