@@ -11,7 +11,7 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 
 ## Setup:
 
-Soon:tm:
+> - Install all [required libraries](#Required-Libraries)
 
 ## Commands:
 
@@ -20,5 +20,11 @@ Soon:tm:
 > - /createpanel - Creates a Support Panel.  
 > - /create_embed - Create a custom embed.  
 > - /links - Sends all links associated with Voxyl Stats.  
+
+## Required Libraries:
+
+> - Soon:tm:
+> - Soon:tm:
+> - Soon:tm:
 
 
