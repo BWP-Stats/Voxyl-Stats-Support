@@ -23,8 +23,8 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 
 ## Required Libraries:
 
-> - Soon:tm:
-> - Soon:tm:
-> - Soon:tm:
+> - [discord.py](https://pypi.org/project/discord.py/)
+> - [discord interactions](https://pypi.org/project/discord-py-slash-command/)
+> - [datetime](https://pypi.org/project/DateTime/)
 
 
