@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import sqlite3
 import json
 import asyncio
+import datetime
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
 from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
@@ -42,11 +43,24 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = self.client.get_channel(logchannel)
-        em = discord.Embed(title=f"Member Joined", description=f"""Tag: {member}
+        now = datetime.datetime.now()
+        secs = (now - member.created_at).days
+        days = 3
+        if secs < days:
+            try:
+                await member.send(f"You were kicked from **Voxyl Stats** due to your account age being below 3 days.")
+            except:
+                pass
+            await member.kick(reason=f"Account age below server limit of {days} days")
+            embed = discord.Embed(title=f"Member Kicked", description=f"{member.mention} ({member.id}) was kicked from the server due to their account being below the server limit of 3 days")
+            await logchannel.send(embed=embed)
+        else:
+            em = discord.Embed(title=f"Member Joined", description=f"""Tag: {member}
 Mention: {member.mention}
-ID: {member.id}""", colour=0x00FF00)
-        em.set_author(name=member, icon_url=member.avatar_url)
-        await channel.send(embed=em)
+ID: {member.id}
+Account Age: {member.created_at}""", colour=0x00FF00)
+            em.set_author(name=member, icon_url=member.avatar_url)
+            await channel.send(embed=em)
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = self.client.get_channel(logchannel)
