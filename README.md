@@ -12,6 +12,10 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 ## Setup:
 
 > - Install all [required libraries](#Required-Libraries)
+> - Download all files from the github
+> - Add files to a server (If you are using one)
+> - Run the file (python3 main.py)
+> - Enjoy!
 
 ## Commands:
 
@@ -25,6 +29,7 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 
 > - [discord.py](https://pypi.org/project/discord.py/)
 > - [discord interactions](https://pypi.org/project/discord-py-slash-command/)
-> - [datetime](https://pypi.org/project/DateTime/)
+> - [datetime](https://pypi.org/project/DateTime/)  
+> - [asyncio](https://pypi.org/project/asyncio/)
 
 
