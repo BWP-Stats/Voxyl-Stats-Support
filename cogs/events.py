@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import json
 import asyncio
 import datetime
+from better_profanity import profanity
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
 from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
@@ -10,6 +11,8 @@ from discord_slash.model import ButtonStyle
 from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash.utils.manage_components import wait_for_component
 
+
+profanity.load_censor_words_from_file("./filter.txt")
 logchannel = 927304057931038800
 
 class Events(commands.Cog):
@@ -68,6 +71,14 @@ Mention: {member.mention}
 ID: {member.id}""", colour=0xFF0000)
         em.set_author(name=member, icon_url=member.avatar_url)
         await channel.send(embed=em)
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if not message.author.bot:
+            if profanity.contains_profanity(message.content):
+                await message.delete()
+                msg = await message.channel.send(f"{message.author.mention} you can't say that word.")
+                await asyncio.sleep(3)
+                await msg.delete()
 
 
 
