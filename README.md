@@ -23,6 +23,7 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - Run main.py (python3 main.py)
 - Enjoy!
 
+
 ## Commands:
 
 - /purge - Purge a specific amount of messages.  
