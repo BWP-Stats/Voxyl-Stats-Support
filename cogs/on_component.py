@@ -16,6 +16,9 @@ from discord_slash.utils.manage_components import wait_for_component
 
 on_role_cooldown = []
 
+supportcategory = 927304036078723122
+verifyrole = 926955604738707597
+
 
 class Oncomp(commands.Cog):
 
@@ -37,7 +40,7 @@ class Oncomp(commands.Cog):
             else:
                 await ctx.defer(hidden=True)
                 data["botusers"].append(ctx.author.id)
-                supcat = ctx.guild.get_channel(927304036078723122)
+                supcat = ctx.guild.get_channel(supportcategory)
                 channel = await ctx.guild.create_text_channel(name=f"bot-{ctx.author.id}", category=supcat)
                 channels = data["channels"]
                 channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "bot"}
@@ -59,7 +62,7 @@ Please explain any questions you have and a member of staff will help you as soo
             else:
                 await ctx.defer(hidden=True)
                 data["ovusers"].append(ctx.author.id)
-                supcat = ctx.guild.get_channel(927304036078723122)
+                supcat = ctx.guild.get_channel(supportcategory)
                 channel = await ctx.guild.create_text_channel(name=f"overlay-{ctx.author.id}", category=supcat)
                 channels = data["channels"]
                 channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "overlay"}
@@ -81,7 +84,7 @@ Please explain any questions you have and a member of staff will help you as soo
             else:
                 await ctx.defer(hidden=True)
                 data["premusers"].append(ctx.author.id)
-                supcat = ctx.guild.get_channel(927304036078723122)
+                supcat = ctx.guild.get_channel(supportcategory)
                 channel = await ctx.guild.create_text_channel(name=f"premium-{ctx.author.id}", category=supcat)
                 channels = data["channels"]
                 channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "premium"}
@@ -103,7 +106,7 @@ Please explain any questions you have and a member of staff will help you as soo
             else:
                 await ctx.defer(hidden=True)
                 data["otusers"].append(ctx.author.id)
-                supcat = ctx.guild.get_channel(927304036078723122)
+                supcat = ctx.guild.get_channel(supportcategory)
                 channel = await ctx.guild.create_text_channel(name=f"other-{ctx.author.id}", category=supcat)
                 channels = data["channels"]
                 channels[channel.id] = {"ownerid" : ctx.author.id, "type" : "other"}
@@ -136,7 +139,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 del data["otusers"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
-            logchannel = ctx.guild.get_channel(927304057931038800)
+            logchannel = ctx.guild.get_channel(supportcategory)
             sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
             async for message in ctx.channel.history(oldest_first = True):
                 print(f"{message.author}: {message.content}")
@@ -148,7 +151,7 @@ Please explain any questions you have and a member of staff will help you as soo
             os.remove(f"ticket-transcript-{ownerid}.txt")
             await ctx.channel.delete()
         elif ctx.component["custom_id"] == "verify":
-            role = ctx.guild.get_role(926955604738707597)
+            role = ctx.guild.get_role(verifyrole)
             if role in ctx.author.roles:
                 await ctx.send("You are already verified", hidden=True)
             else:
