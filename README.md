@@ -17,7 +17,8 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - Add files to a server (If you are using one)
 - Replace all necessary information in cogs (Will be a config.json soon)
   - Add the token in the quotation marks in main.py
-  - Replace supcat variable with your support category ID in on_component.py
+  - Replace supportcategory variable with your support category ID in on_component.py
+  - Replace verifyrole variable with your verified role
   - Replace the logchannel variable in events.py with your log channel
 - Run main.py (python3 main.py)
 - Enjoy!
