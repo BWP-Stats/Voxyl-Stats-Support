@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands, tasks
-import sqlite3
 import json
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
