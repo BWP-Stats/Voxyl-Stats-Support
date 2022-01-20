@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands, tasks
-import sqlite3
 import asyncio
 import json
 from discord_slash import cog_ext, SlashContext
