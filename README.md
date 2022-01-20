@@ -13,7 +13,9 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 
 > - Install all [required libraries](#Required-Libraries)
 > - Download all files from the github
+> - Create a discord application and bot [here](https://discordapp.com/developers/applications)
 > - Add files to a server (If you are using one)
+> - Add your bots token in the client.run("") quotations marks in main.py
 > - Run main.py (python3 main.py)
 > - Enjoy!
 
