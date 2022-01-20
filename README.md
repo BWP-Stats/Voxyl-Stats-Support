@@ -31,5 +31,6 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 > - [discord interactions](https://pypi.org/project/discord-py-slash-command/)
 > - [datetime](https://pypi.org/project/DateTime/)  
 > - [asyncio](https://pypi.org/project/asyncio/)
+> - [better-profanity](https://pypi.org/project/better-profanity/)
 
 
