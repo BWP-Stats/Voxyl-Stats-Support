@@ -39,7 +39,7 @@ class Lock(commands.Cog):
             if reason == None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Locked"), description=(f"{channel.mention} has been locked with reason: {reason}"))
-            await ctx.send(embed=embed)
+            await channel.send(embed=embed)
         else:
             await ctx.send("You need ``ban members`` permission to complete this command", hidden=True)
 
@@ -67,7 +67,7 @@ class Lock(commands.Cog):
             if reason == None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Unlocked"), description=(f"""{channel.mention} has been unlocked with reason: {reason}"""))
-            await ctx.send(embed=embed)
+            await channel.send(embed=embed)
         else:
             await ctx.send("You need ``ban members`` permission to complete this command", hidden=True)
 

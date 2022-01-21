@@ -18,6 +18,7 @@ on_role_cooldown = []
 
 supportcategory = 927304036078723122
 verifyrole = 926955604738707597
+logschannel = 927304057931038800
 
 
 class Oncomp(commands.Cog):
@@ -139,7 +140,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 del data["otusers"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
-            logchannel = ctx.guild.get_channel(supportcategory)
+            logchannel = ctx.guild.get_channel(logschannel)
             sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
             async for message in ctx.channel.history(oldest_first = True):
                 print(f"{message.author}: {message.content}")
