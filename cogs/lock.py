@@ -35,7 +35,7 @@ class Lock(commands.Cog):
     async def _lock(self, ctx:SlashContext, channel:discord.TextChannel, reason:str=None):
         if ctx.author.guild_permissions.ban_members == True:
             role = ctx.guild.get_role(926955604738707597)
-            await channel.set_permissions(role, send_messages=False)
+            await channel.set_permissions(role, send_messages=False, read_messages=True)
             if reason == None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Locked"), description=(f"{channel.mention} has been locked with reason: {reason}"))
@@ -63,7 +63,7 @@ class Lock(commands.Cog):
     async def _unlock(self, ctx:SlashContext, channel:discord.TextChannel, reason:str=None):
         if ctx.author.guild_permissions.ban_members == True:
             role = ctx.guild.get_role(926955604738707597)
-            await channel.set_permissions(role, send_messages=True)
+            await channel.set_permissions(role, send_messages=True, read_messages=True)
             if reason == None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Unlocked"), description=(f"""{channel.mention} has been unlocked with reason: {reason}"""))
