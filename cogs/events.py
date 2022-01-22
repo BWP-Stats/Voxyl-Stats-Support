@@ -79,8 +79,19 @@ ID: {member.id}""", colour=0xFF0000)
                 msg = await message.channel.send(f"{message.author.mention} you can't say that word.")
                 await asyncio.sleep(3)
                 await msg.delete()
-
-
+        if len(message.mentions) >= 5:
+            if message.author.guild_permissions.ban_members == True:
+                return
+            mutedrole  = message.guild.get_role(934421828728922152)
+            await message.author.add_roles(mutedrole)
+            await message.channel.send(f"``Automatic Mute`` {message.author.mention} ({message.author.id}) has been muted for 5 minutes for having over 5 mentions in 1 message")
+            embed=discord.Embed(title="Automatic Mute", description=f"""**Member:** {message.author} ({message.author.id}
+**Duration:** 5 minutes
+**Reason:** 5 mentions in 1 message""")
+            logchannel = message.guild.get_channel(logschannel)
+            await logchannel.send(embed=embed)
+            await asyncio.sleep(300)
+            await message.author.remove_roles(mutedrole)
 
 def setup(client):
     client.add_cog(Events(client))
