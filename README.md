@@ -31,6 +31,9 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - /createpanel - Creates a Support Panel.  
 - /create_embed - Create a custom embed.  
 - /links - Sends all links associated with Voxyl Stats.  
+- /lock - Lock a channel
+- /unlock - Unlock a channel
+- /slowmode - Add a slowmode to a channel
 
 ## Required Libraries:
 
