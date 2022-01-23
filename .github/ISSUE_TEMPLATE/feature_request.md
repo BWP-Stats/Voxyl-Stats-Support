@@ -13,5 +13,8 @@ Name for the command/feature
 **Command/Feature Info**
 What will the command/feature do
 
+**Screenshots/links**
+Any links or screenshots to help explain your suggestion
+
 **Extra Info**
 Any extra info
