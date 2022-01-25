@@ -8,8 +8,26 @@ os.chdir("./")
 
 intents = discord.Intents.default()
 
+
+async def create_thread(self,name,minutes,message):
+    token = 'Bot ' + self._state.http.token
+    url = f"https://discord.com/api/v9/channels/{self.id}/messages/{message.id}/threads"
+    headers = {
+        "authorization" : token,
+        "content-type" : "application/json"
+    }
+    data = {
+        "name" : name,
+        "type" : 11,
+        "auto_archive_duration" : minutes
+    }
+ 
+    return requests.post(url,headers=headers,json=data).json()
+
+
 intents.members = True
 client = commands.Bot(command_prefix = "s!", intents = intents)
+discord.TextChannel.create_thread = create_thread
 slash = SlashCommand(client, sync_commands=True, sync_on_cog_reload=True)
 
 client.remove_command("help")

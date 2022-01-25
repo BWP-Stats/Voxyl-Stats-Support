@@ -3,6 +3,7 @@ from discord.ext import commands, tasks
 import json
 import asyncio
 import datetime
+import requests
 from better_profanity import profanity
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_button, create_actionrow
@@ -36,13 +37,16 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         if not before.author.bot == True:
-            channel = self.client.get_channel(logschannel)
-            em = discord.Embed(title=f"Message editted in #{before.channel}", description=f"[Message Link](https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id})", timestamp=after.created_at)
-            em.add_field(name="Before", value=f"{before.content[:1000]}")
-            em.add_field(name="After", value=f"{after.content[:1000]}")
-            em.set_author(name=before.author, icon_url=before.author.avatar_url)
-            em.set_footer(text=f"{before.author.id}")
-            await channel.send(embed=em)
+            try:
+                channel = self.client.get_channel(logschannel)
+                em = discord.Embed(title=f"Message editted in #{before.channel}", description=f"[Message Link](https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id})", timestamp=after.created_at)
+                em.add_field(name="Before", value=f"{before.content[:1000]}")
+                em.add_field(name="After", value=f"{after.content[:1000]}")
+                em.set_author(name=before.author, icon_url=before.author.avatar_url)
+                em.set_footer(text=f"{before.author.id}")
+                await channel.send(embed=em)
+            except:
+                pass
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = self.client.get_channel(logschannel)
@@ -93,6 +97,12 @@ ID: {member.id}""", colour=0xFF0000)
             await logchannel.send(embed=embed)
             await asyncio.sleep(300)
             await message.author.remove_roles(mutedrole)
+        if message.channel.id == 927194633631576124:
+            try:
+                await message.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=message)
+            except Exception as e:
+                print(e)
+                pass
 
 def setup(client):
     client.add_cog(Events(client))
