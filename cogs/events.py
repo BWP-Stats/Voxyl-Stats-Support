@@ -105,7 +105,7 @@ ID: {member.id}""", colour=0xFF0000)
                 pass
         
         elif message.content.lower().find("nom") != -1 and not message.author.bot:
-            await message.channel.send("NOM")
+            await message.channel.send("NOM", delete_after=10)
 
 def setup(client):
     client.add_cog(Events(client))
