@@ -8,6 +8,9 @@ os.chdir("./")
 
 intents = discord.Intents.default()
 
+with open("config.json", "r") as jsonfile:
+    configData = json.load(jsonfile)
+    TOKEN = configData["TOKEN"]
 
 async def create_thread(self,name,minutes,message):
     token = 'Bot ' + self._state.http.token
@@ -70,4 +73,4 @@ async def on_ready():
 
 
 
-client.run("")
+client.run(TOKEN)
