@@ -103,6 +103,9 @@ ID: {member.id}""", colour=0xFF0000)
             except Exception as e:
                 print(e)
                 pass
+        
+        elif message.content.lower().find("nom") != -1 and not message.author.bot:
+            await message.channel.send("NOM")
 
 def setup(client):
     client.add_cog(Events(client))
