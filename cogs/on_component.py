@@ -14,11 +14,15 @@ from discord_slash.model import ButtonStyle
 from discord_slash.utils.manage_commands import create_option, create_choice
 from discord_slash.utils.manage_components import wait_for_component
 
-on_role_cooldown = []
-
 supportcategory = 927304036078723122
 verifyrole = 926955604738707597
 logschannel = 927304057931038800
+
+with open("config.json", "r") as jsonfile:
+    configData = json.load(jsonfile)
+    supportcategory = configData["supportcategory"]
+    verifyrole = configData["verifyrole"]
+    logschannel = configData["logchannel"]
 
 
 class Oncomp(commands.Cog):

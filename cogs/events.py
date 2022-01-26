@@ -14,7 +14,12 @@ from discord_slash.utils.manage_components import wait_for_component
 
 
 profanity.load_censor_words_from_file("./filter.txt")
-logschannel = 927304057931038800
+
+with open("config.json", "r") as jsonfile:
+    configData = json.load(jsonfile)
+    logschannel = configData["logchannel"]
+    muterole = configData["mutedrole"]
+    suggestionchannel = configData["suggestionchannel"]
 
 class Events(commands.Cog):
 
@@ -87,7 +92,7 @@ ID: {member.id}""", colour=0xFF0000)
         if len(message.mentions) >= 5:
             if message.author.guild_permissions.ban_members == True:
                 return
-            mutedrole  = message.guild.get_role(934421828728922152)
+            mutedrole  = message.guild.get_role(muterole)
             await message.author.add_roles(mutedrole)
             await message.channel.send(f"``Automatic Mute`` {message.author.mention} ({message.author.id}) has been muted for 5 minutes for having over 5 mentions in 1 message")
             embed=discord.Embed(title="Automatic Mute", description=f"""**Member:** {message.author} ({message.author.id}
@@ -97,12 +102,18 @@ ID: {member.id}""", colour=0xFF0000)
             await logchannel.send(embed=embed)
             await asyncio.sleep(300)
             await message.author.remove_roles(mutedrole)
-        if message.channel.id == 927194633631576124:
-            try:
-                await message.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=message)
-            except Exception as e:
-                print(e)
-                pass
+        if message.channel.id == suggestionchannel:
+            if not message.author.bot:
+                try:
+                    embed = discord.Embed(title=f"New Suggestion", description=f"Suggestion: {message.content[0:3500]}", timestamp=message.created_at)
+                    embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+                    embed.set_footer(text=f"{message.author.id}")
+                    msg = await message.channel.send(embed=embed)
+                    await message.delete()
+                    await msg.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=msg)
+                except Exception as e:
+                    print(e)
+                    pass
         
         elif message.content.lower().find("nom") != -1 and not message.author.bot:
             await message.channel.send("NOM", delete_after=10)
