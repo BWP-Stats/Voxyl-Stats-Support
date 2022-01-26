@@ -15,11 +15,17 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - Download all files from the github
 - Create a discord application and bot [here](https://discordapp.com/developers/applications)
 - Add files to a server (If you are using one)
-- Replace all necessary information in cogs (Will be a config.json soon)
-  - Add the token in the quotation marks in main.py
-  - Replace supportcategory variable with your support category ID in on_component.py
-  - Replace verifyrole variable with your verified role
-  - Replace the logchannel variable in events.py with your log channel
+- Create a file called `config.json` and include the following info
+```json
+{
+    "TOKEN": "",
+    "logchannel": 1,
+    "mutedrole": 1,
+    "suggestionchannel": 1,
+    "verifyrole": 1,
+    "supportcategory": 1
+}
+```
 - Run main.py (python3 main.py)
 - Enjoy!
 
