@@ -1,3 +1,6 @@
 config.json
 cogs/__pycache__/*
 *.pyc
+cogs/__pycache__/on_component.cpython-39.pyc
+cogs/__pycache__/events.cpython-39.pyc
+config.json

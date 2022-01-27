@@ -111,6 +111,8 @@ ID: {member.id}""", colour=0xFF0000)
                     msg = await message.channel.send(embed=embed)
                     await message.delete()
                     await msg.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=msg)
+                    await msg.add_reaction("<:upvote:927624916029816902>")
+                    await msg.add_reaction("<:downvote:927624982782181438>")
                 except Exception as e:
                     print(e)
                     pass
