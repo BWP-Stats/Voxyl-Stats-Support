@@ -53,7 +53,8 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
         elif ctx.component["custom_id"] == "ovsup":
@@ -75,7 +76,8 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
         elif ctx.component["custom_id"] == "presup":
@@ -97,7 +99,8 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
         elif ctx.component["custom_id"] == "otsup":
@@ -119,7 +122,8 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
         elif ctx.component["custom_id"] == "close":
