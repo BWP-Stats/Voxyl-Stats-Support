@@ -67,7 +67,7 @@ class Tags(commands.Cog):
         ]
     )
     async def _tag_use(self, ctx:SlashContext, name:str, member:discord.Member=None):
-        role = ctx.guild.get_role(858762299933589524)
+        role = ctx.guild.get_role(926955425704869938)
         with open("tags.json") as f:
             data = json.load(f)
         if name in data["tags"]:
