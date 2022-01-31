@@ -43,8 +43,10 @@ class Events(commands.Cog):
     async def on_message_edit(self, before, after):
         if not before.author.bot == True:
             try:
+                if before.content == after.content: # Stops any useless stuff getting logged as edits
+                    return
                 channel = self.client.get_channel(logschannel)
-                em = discord.Embed(title=f"Message editted in #{before.channel}", description=f"[Message Link](https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id})", timestamp=after.created_at)
+                em = discord.Embed(title=f"Message edited in #{before.channel}", description=f"[Message Link](https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id})", timestamp=after.created_at)
                 em.add_field(name="Before", value=f"{before.content[:1000]}")
                 em.add_field(name="After", value=f"{after.content[:1000]}")
                 em.set_author(name=before.author, icon_url=before.author.avatar_url)
