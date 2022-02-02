@@ -19,7 +19,7 @@ class Nom(commands.Cog):
         description="nom"
     )
     async def _nom(self, ctx):
-        await ctx.send("NOM", delete_after=10)
+        await ctx.send("NOM", delete_after=60)
 
 
 def setup(client):
