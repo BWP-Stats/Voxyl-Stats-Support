@@ -20,8 +20,7 @@ class Extras(commands.Cog):
     async def _links(self, ctx:SlashContext):
         embed = discord.Embed(title="Important Links", description=f"""[Invite Link](https://discord.com/api/oauth2/authorize?client_id=926814210321707028&permissions=277025442816&scope=bot%20applications.commands)
 [Support Server](https://discord.gg/fBnfWXSDpu)
-[Buymeacoffee](https://www.buymeacoffee.com/voxlystats/)
-Website (Soon)""")
+[Buymeacoffee](https://www.buymeacoffee.com/voxlystats/)""")
         buttons = [
             create_button(style=ButtonStyle.URL, label="Invite", url="https://discord.com/api/oauth2/authorize?client_id=926814210321707028&permissions=277025442816&scope=bot%20applications.commands", disabled=False),
             create_button(style=ButtonStyle.URL, label="Support Server", url="https://discord.gg/fBnfWXSDpu", disabled=False),
