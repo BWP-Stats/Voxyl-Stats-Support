@@ -25,10 +25,7 @@ class Oncomp(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-    
-    #@commands.command()
-    #async def test(self, ctx):
-        #await ctx.send("eeeeeeeeeeeeeeeeeeee")
+
 
     @commands.Cog.listener()
     async def on_component(self, ctx):
@@ -53,7 +50,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(f"{ctx.author.mention}", embed=embed, components=[create_actionrow(*buttons)])
                 await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
@@ -76,7 +73,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(f"{ctx.author.mention}", embed=embed, components=[create_actionrow(*buttons)])
                 await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
@@ -99,7 +96,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(f"{ctx.author.mention}", embed=embed, components=[create_actionrow(*buttons)])
                 await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
@@ -122,7 +119,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 buttons = [
                     create_button(style=ButtonStyle.red, label="Close", custom_id="close")
                 ]
-                contmsg = await channel.send(embed=embed, components=[create_actionrow(*buttons)])
+                contmsg = await channel.send(f"{ctx.author.mention}", embed=embed, components=[create_actionrow(*buttons)])
                 await contmsg.pin()
                 await channel.set_permissions(ctx.author, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
                 await ctx.send(f"Ticket created in {channel.mention}", hidden=True)
