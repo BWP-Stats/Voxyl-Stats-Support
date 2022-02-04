@@ -10,6 +10,10 @@ from discord_slash.model import ButtonStyle
 from discord_slash.utils.manage_commands import create_option, create_choice
 
 
+with open("config.json", "r") as jsonfile:
+    configData = json.load(jsonfile)
+    verifyrole = configData["verifyrole"]
+
 class Lock(commands.Cog):
 
     def __init__(self, client):
@@ -34,12 +38,13 @@ class Lock(commands.Cog):
     )
     async def _lock(self, ctx:SlashContext, channel:discord.TextChannel, reason:str=None):
         if ctx.author.guild_permissions.ban_members == True:
-            role = ctx.guild.get_role(926955604738707597)
+            role = ctx.guild.get_role(verifyrole)
             await channel.set_permissions(role, send_messages=False, read_messages=True)
-            if reason == None:
+            if reason is None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Locked"), description=(f"{channel.mention} has been locked with reason: {reason}"))
             await channel.send(embed=embed)
+            await ctx.send(f"Successfully locked {channel.mention}", hidden=True)
         else:
             await ctx.send("You need ``ban members`` permission to complete this command", hidden=True)
 
@@ -62,12 +67,13 @@ class Lock(commands.Cog):
     )
     async def _unlock(self, ctx:SlashContext, channel:discord.TextChannel, reason:str=None):
         if ctx.author.guild_permissions.ban_members == True:
-            role = ctx.guild.get_role(926955604738707597)
+            role = ctx.guild.get_role(verifyrole)
             await channel.set_permissions(role, send_messages=True, read_messages=True)
-            if reason == None:
+            if reason is None:
                 reason = "None Given"
             embed=discord.Embed(title=(f"Channel Unlocked"), description=(f"""{channel.mention} has been unlocked with reason: {reason}"""))
             await channel.send(embed=embed)
+            await ctx.send(f"Successfully unlocked {channel.mention}", hidden=True)
         else:
             await ctx.send("You need ``ban members`` permission to complete this command", hidden=True)
 
