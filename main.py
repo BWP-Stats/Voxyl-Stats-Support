@@ -51,7 +51,7 @@ async def on_ready():
 
     print(f"Logged in as {client.user}!")
 
-    await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.playing, name="voxyl.net"))
+    await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.playing, name="Support"))
 
 
 
