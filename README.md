@@ -40,6 +40,11 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - /lock - Lock a channel
 - /unlock - Unlock a channel
 - /slowmode - Add a slowmode to a channel
+- /tag
+    - Create - create a new tag
+    - Remove - remove a tag
+    - List - get a list of all current tags
+    - Use - use one of the created tags
 
 ## Required Libraries:
 
