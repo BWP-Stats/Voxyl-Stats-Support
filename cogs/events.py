@@ -107,14 +107,9 @@ ID: {member.id}""", colour=0xFF0000)
         if message.channel.id == suggestionchannel:
             if not message.author.bot:
                 try:
-                    embed = discord.Embed(title=f"New Suggestion", description=f"Suggestion: {message.content[0:3500]}", timestamp=message.created_at)
-                    embed.set_author(name=message.author, icon_url=message.author.avatar_url)
-                    embed.set_footer(text=f"{message.author.id}")
-                    msg = await message.channel.send(embed=embed)
-                    await message.delete()
-                    await msg.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=msg)
-                    await msg.add_reaction("<:upvote:927624916029816902>")
-                    await msg.add_reaction("<:downvote:927624982782181438>")
+                    await message.channel.create_thread(name=f"suggestion-discussion", minutes="1440", message=message)
+                    await message.add_reaction("<:upvote:927624916029816902>")
+                    await message.add_reaction("<:downvote:927624982782181438>")
                 except Exception as e:
                     print(e)
                     pass
