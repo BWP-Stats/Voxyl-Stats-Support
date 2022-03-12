@@ -30,7 +30,7 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
 - Enjoy!
 
 
-## Commands:
+## Features:
 
 - /purge - Purge a specific amount of messages.  
 - /verifymessage - Send a verification message to a channel.  
@@ -45,6 +45,11 @@ The support bot Voxyl Stats [Discord Sever](https://discord.gg/fBnfWXSDpu)
     - Remove - remove a tag
     - List - get a list of all current tags
     - Use - use one of the created tags
+- /nom (Most important command)
+- Suggestion system
+- Deleted & edited message logs
+- Member join & leave logs
+- Simple verification system
 
 ## Required Libraries:
 
