@@ -117,5 +117,16 @@ ID: {member.id}""", colour=0xFF0000)
         elif message.content.lower().find("nom") != -1 and not message.author.bot:
             await message.channel.send("NOM", delete_after=10)
 
+        if message.channel.id == 965352171040276500:
+            try:
+                await message.publish()
+            except:
+                pass
+        if message.channel.id == 965360224003326033:
+            try:
+                await message.publish()
+            except:
+                pass
+
 def setup(client):
     client.add_cog(Events(client))
