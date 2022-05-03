@@ -2,6 +2,7 @@ import nextcord
 import json
 import os
 from cogs.tickets import TicketsView, TicketManagementView
+from cogs.verifymessage import VerifyView
 from nextcord.ext import commands , tasks
 import requests
 
@@ -17,6 +18,7 @@ class Bot(commands.Bot):
         if not self.persistent_views_added:
             self.add_view(TicketsView())
             self.add_view(TicketManagementView())
+            self.add_view(VerifyView())
             self.persistent_views_added = True
 
         print(f"Logged in as {client.user}!")
@@ -25,7 +27,7 @@ class Bot(commands.Bot):
 
 with open('config.json','r') as jsonfile:
     configData = json.load(jsonfile)
-    TOKEN = configData["DISCORD_TOKEN"]
+    TOKEN = configData["TOKEN"]
 
 intents = nextcord.Intents.default()
 

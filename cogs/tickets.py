@@ -18,7 +18,7 @@ class TicketManagementView(nextcord.ui.View):
         del data["users"][index]
         with open("ticketinfo.json", "w") as f:
             json.dump(data, f)
-        logchannel = ctx.guild.get_channel(959927892014428231)
+        logchannel = ctx.guild.get_channel(927304057931038800)
         sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
         async for message in ctx.channel.history(oldest_first = True):
             print(f"{message.author}: {message.content}")
@@ -45,7 +45,7 @@ class TicketsView(nextcord.ui.View):
         else:
             await ctx.response.defer(with_message=True, ephemeral=True)
             data["users"].append(ctx.user.id)
-            supcat = ctx.guild.get_channel(961173724390891540)
+            supcat = ctx.guild.get_channel(927304036078723122)
             channel = await ctx.guild.create_text_channel(name=f"support-{ctx.user.id}", category=supcat)
             channels = data["channels"]
             channels[channel.id] = {"ownerid" : ctx.user.id}
