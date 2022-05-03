@@ -1,64 +1,45 @@
-import discord
+import nextcord
 import json
 import os
-from discord.ext import commands , tasks
-from discord_slash import SlashCommand, SlashContext
+from cogs.tickets import TicketsView, TicketManagementView
+from cogs.verifymessage import VerifyView
+from nextcord.ext import commands , tasks
 import requests
+
 os.chdir("./")
 
-intents = discord.Intents.default()
+class Bot(commands.Bot):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.persistent_views_added = False
+        self = self
 
-with open("config.json", "r") as jsonfile:
+    async def on_ready(self):
+        if not self.persistent_views_added:
+            self.add_view(TicketsView())
+            self.add_view(TicketManagementView())
+            self.add_view(VerifyView())
+            self.persistent_views_added = True
+
+        print(f"Logged in as {client.user}!")
+
+        await client.change_presence(status = nextcord.Status.online, activity=nextcord.Activity(type=nextcord.ActivityType.playing, name="Support"))
+
+with open('config.json','r') as jsonfile:
     configData = json.load(jsonfile)
     TOKEN = configData["TOKEN"]
 
-async def create_thread(self,name,minutes,message):
-    token = 'Bot ' + self._state.http.token
-    url = f"https://discord.com/api/v9/channels/{self.id}/messages/{message.id}/threads"
-    headers = {
-        "authorization" : token,
-        "content-type" : "application/json"
-    }
-    data = {
-        "name" : name,
-        "type" : 11,
-        "auto_archive_duration" : minutes
-    }
- 
-    return requests.post(url,headers=headers,json=data).json()
-
+intents = nextcord.Intents.default()
 
 intents.members = True
-client = commands.Bot(command_prefix = "s!", intents = intents)
-discord.TextChannel.create_thread = create_thread
-slash = SlashCommand(client, sync_commands=True, sync_on_cog_reload=True)
-
-client.remove_command("help")
-
-
-
+client = Bot(command_prefix = "nom!", intents = intents)
 
 for filename in os.listdir('./cogs'):   
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
         print(f"Loaded {filename} cog")
 
-
-
-@client.event
-async def on_ready():
-    print ("Voxyl Stats Support Ready")
-
-    print(f"Logged in as {client.user}!")
-
-    await client.change_presence(status = discord.Status.online, activity=discord.Activity(type=discord.ActivityType.playing, name="Support"))
-
-
-
-
-
-
-
+client.run(TOKEN)
 
 
 
