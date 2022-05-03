@@ -64,7 +64,7 @@ class Tickets(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @nextcord.slash_command(name="sendticket", description="Send a ticket message to a channel", guild_ids=[822791012371005440])
+    @nextcord.slash_command(name="sendticket", description="Send a ticket message to a channel", guild_ids=[926955080010301480])
     async def send_ticket(self,
         ctx : Interaction,
         channel : GuildChannel = SlashOption(
