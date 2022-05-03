@@ -19,7 +19,7 @@ class VerifyView(nextcord.ui.View):
         else:
             await ctx.send("You are already verified")
 
-class Tickets(commands.Cog):
+class Verify(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -43,4 +43,4 @@ class Tickets(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Tickets(client))
+    client.add_cog(Verify(client))
