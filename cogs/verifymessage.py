@@ -15,9 +15,9 @@ class VerifyView(nextcord.ui.View):
         role = ctx.guild.get_role(926955604738707597)
         if not role in ctx.user.roles:
             ctx.user.add_roles(926955604738707597)
-            await ctx.send("Successfully verified")
+            await ctx.send("Successfully verified", ephemeral=True)
         else:
-            await ctx.send("You are already verified")
+            await ctx.send("You are already verified", ephemeral=True)
 
 class Verify(commands.Cog):
 
