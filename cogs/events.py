@@ -18,7 +18,8 @@ class Events(commands.Cog):
                 return
             with open("config.json") as f:
                 data = json.load(f)
-                API_KEY = data["GOOGLE_API_KEY"]
+
+            API_KEY = data["GOOGLE_API_KEY"]
 
             client = discovery.build(
                 "commentanalyzer",
@@ -35,16 +36,27 @@ class Events(commands.Cog):
 
             response = client.comments().analyze(body=analyze_request).execute()
             print(json.dumps(response, indent=2))
+            logchannel = message.guild.get_channel(948273742700744734)
             if response['attributeScores']['SEVERE_TOXICITY']['summaryScore']['value'] > 0.9:
-                await message.reply("Would delete with a value of: {} for SEVERE_TOXICITY".format(response['attributeScores']['SEVERE_TOXICITY']['summaryScore']['value']))
+                await message.delete()
+                await message.channel.send(f"{message.author.mention} Your message has been deleted for `SEVERE_TOXICITY`", delete_after=10)
+                embed=nextcord.Embed(title="Message Deleted", description=f"{message.author.mention} message has been deleted for `SEVERE_TOXICITY : {response['attributeScores']['SEVERE_TOXICITY']['summaryScore']['value']}`\n\n**Message Content**:\n {message.content[0:3000]}")
+                await logchannel.send(embed=embed)
             elif response['attributeScores']['THREAT']['summaryScore']['value'] > 0.85:
-                await message.reply("Would delete with a value of: {} for THREAT".format(response['attributeScores']['THREAT']['summaryScore']['value']))
+                await message.delete()
+                await message.channel.send(f"{message.author.mention} Your message has been deleted for `THREAT`", delete_after=10)
+                embed=nextcord.Embed(title="Message Deleted", description=f"{message.author.mention} message has been deleted for `THREAT : {response['attributeScores']['THREAT']['summaryScore']['value']}`\n\n**Message Content**:\n {message.content[0:3000]}")
+                await logchannel.send(embed=embed)
             elif response['attributeScores']['IDENTITY_ATTACK']['summaryScore']['value'] > 0.85:
-                await message.reply("Would delete with a value of: {} for IDENTITY_ATTACK".format(response['attributeScores']['IDENTITY_ATTACK']['summaryScore']['value']))
+                await message.delete()
+                await message.channel.send(f"{message.author.mention} Your message has been deleted for `IDENTITY_ATTACK`", delete_after=10)
+                embed=nextcord.Embed(title="Message Deleted", description=f"{message.author.mention} message has been deleted for `IDENTITY_ATTACK : {response['attributeScores']['IDENTITY_ATTACK']['summaryScore']['value']}`\n\n**Message Content**:\n {message.content[0:3000]}")
+                await logchannel.send(embed=embed)
             elif response['attributeScores']['SEXUALLY_EXPLICIT']['summaryScore']['value'] > 0.85:
-                await message.reply("Would delete with a value of: {} for SEXUALLY_EXPLICIT".format(response['attributeScores']['SEXUALLY_EXPLICIT']['summaryScore']['value']))
-            else:
-                message.reply("Would not delete")
+                await message.delete()
+                await message.channel.send(f"{message.author.mention} Your message has been deleted for `SEXUALLY_EXPLICIT`", delete_after=10)
+                embed=nextcord.Embed(title="Message Deleted", description=f"{message.author.mention} message has been deleted for `SEXUALLY_EXPLICIT : {response['attributeScores']['SEXUALLY_EXPLICIT']['summaryScore']['value']}`\n\n**Message Content**:\n {message.content[0:3000]}")
+                await logchannel.send(embed=embed)
 
 
 def setup(client):
