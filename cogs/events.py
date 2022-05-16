@@ -91,7 +91,7 @@ class Events(commands.Cog):
             except Exception as e:
                 print(e)
                 logchannel = message.guild.get_channel(927304057931038800)
-                if "kys" in message.content:
+                if "kys" in message.content.lower():
                     await message.delete()
                     await message.channel.send(f"{message.author.mention} Your message has been deleted for `THREAT`", delete_after=10)
                     embed=nextcord.Embed(title="Message Deleted", description=f"{message.author.mention} message has been deleted for `THREAT`\n\n**Message Content**:\n {message.content[0:3000]}")
