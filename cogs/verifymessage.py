@@ -24,7 +24,7 @@ class Verify(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @nextcord.slash_command(name="sendverify", description="Send a verification message to a channel", guild_ids=[926955080010301480])
+    @nextcord.slash_command(name="sendverify", description="Send a verification message to a channel", guild_ids=[926955080010301480, 801744339343507457])
     async def send_ticket(self,
         ctx : Interaction,
         channel : GuildChannel = SlashOption(

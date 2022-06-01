@@ -1,7 +1,7 @@
 import nextcord
 import json
 import os
-from cogs.tickets import TicketsView, TicketManagementView
+from cogs.tickets import TicketsView, TicketManagementView, FAQView
 from cogs.verifymessage import VerifyView
 from nextcord.ext import commands , tasks
 import requests
@@ -19,6 +19,7 @@ class Bot(commands.Bot):
             self.add_view(TicketsView())
             self.add_view(TicketManagementView())
             self.add_view(VerifyView())
+            self.add_view(FAQView())
             self.persistent_views_added = True
 
         print(f"Logged in as {client.user}!")
