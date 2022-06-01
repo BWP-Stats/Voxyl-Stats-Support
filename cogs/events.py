@@ -5,25 +5,30 @@ from nextcord.abc import GuildChannel
 from googleapiclient import discovery
 
 class SuggestionTypeView(nextcord.ui.View):
-    def __init__(self):
+    def __init__(self, suggester):
+        self.suggester = suggester
         super().__init__(timeout=120)
 
     @nextcord.ui.button(label="Discord Bot", style=nextcord.ButtonStyle.blurple, custom_id="suggestion_type_discord_bot")
     async def discord_bot_suggestion_type(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        await ctx.channel.edit(name=f"discordbot-{ctx.channel.name}")
-        await ctx.message.delete()
+        if self.suggester == ctx.user.id:
+            await ctx.channel.edit(name=f"discordbot-{ctx.channel.name}")
+            await ctx.message.delete()
     @nextcord.ui.button(label="Overlay", style=nextcord.ButtonStyle.blurple, custom_id="suggestion_type_overlay")
     async def overlay_suggestion_type(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        await ctx.channel.edit(name=f"overlay-{ctx.channel.name}")
-        await ctx.message.delete()
+        if self.suggester == ctx.user.id:
+            await ctx.channel.edit(name=f"overlay-{ctx.channel.name}")
+            await ctx.message.delete()
     @nextcord.ui.button(label="Website", style=nextcord.ButtonStyle.blurple, custom_id="suggestion_type_website")
     async def website_suggestion_type(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        await ctx.channel.edit(name=f"website-{ctx.channel.name}")
-        await ctx.message.delete()
+        if self.suggester == ctx.user.id:
+            await ctx.channel.edit(name=f"website-{ctx.channel.name}")
+            await ctx.message.delete()
     @nextcord.ui.button(label="In-game Bot", style=nextcord.ButtonStyle.blurple, custom_id="suggestion_type_igbot")
     async def igbot_suggestion_type(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        await ctx.channel.edit(name=f"igbot-{ctx.channel.name}")
-        await ctx.message.delete()
+        if self.suggester == ctx.user.id:
+            await ctx.channel.edit(name=f"igbot-{ctx.channel.name}")
+            await ctx.message.delete()
 
 class Events(commands.Cog):
 
@@ -119,9 +124,9 @@ class Events(commands.Cog):
                     await logchannel.send(embed=embed)
         try:
             if not message.author.bot:
-                if message.channel.id == 927194633631576124:
+                if message.channel.id == 927194633631576124 or message.channel.id == 978381668480061461:
                     thread = await message.channel.create_thread(name=f"suggestion-{message.author}", message=message, auto_archive_duration=10080)
-                    await thread.send(f"{message.author.mention} What is your suggestion for?", view=SuggestionTypeView(), delete_after=120)
+                    await thread.send(f"{message.author.mention} What is your suggestion for?", view=SuggestionTypeView(suggester=message.author.id), delete_after=120)
         except Exception as e:
             print(e)
             pass
