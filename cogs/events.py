@@ -119,7 +119,7 @@ class Events(commands.Cog):
                     await logchannel.send(embed=embed)
         try:
             if not message.author.bot:
-                if message.channel.id == 978381668480061461:
+                if message.channel.id == 927194633631576124:
                     thread = await message.channel.create_thread(name=f"suggestion-{message.author}", message=message, auto_archive_duration=10080)
                     await thread.send(f"{message.author.mention} What is your suggestion for?", view=SuggestionTypeView(), delete_after=120)
         except Exception as e:
