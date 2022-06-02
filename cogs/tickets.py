@@ -4,6 +4,36 @@ from nextcord import Interaction, SlashOption
 from nextcord.abc import GuildChannel
 import json, sys, os
 
+class FAQView(nextcord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @nextcord.ui.button(label="Discord Bot FAQ", style=nextcord.ButtonStyle.blurple, custom_id="faq_db")
+    async def discord_bot_faq(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        with open("config.json") as f:
+            data = json.load(f)
+        faqmsg = data["bot"]
+        await ctx.send(content=f"{faqmsg}", ephemeral=True)
+    @nextcord.ui.button(label="Overlay FAQ", style=nextcord.ButtonStyle.blurple, custom_id="faq_over")
+    async def overlay_faq(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        with open("config.json") as f:
+            data = json.load(f)
+        faqmsg = data["overlay"]
+        await ctx.send(content=f"{faqmsg}", ephemeral=True)
+    @nextcord.ui.button(label="Website FAQ", style=nextcord.ButtonStyle.blurple, custom_id="faq_web")
+    async def website_faq(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        with open("config.json") as f:
+            data = json.load(f)
+        faqmsg = data["web"]
+        await ctx.send(content=f"{faqmsg}", ephemeral=True)
+    @nextcord.ui.button(label="In-game Bot FAQ", style=nextcord.ButtonStyle.blurple, custom_id="faq_igb")
+    async def ig_bot_faq(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        with open("config.json") as f:
+            data = json.load(f)
+        faqmsg = data["igbot"]
+        await ctx.send(content=f"{faqmsg}", ephemeral=True)
+
+
 class TicketManagementView(nextcord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -35,6 +65,10 @@ class TicketsView(nextcord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
+    @nextcord.ui.button(label="FAQ", style=nextcord.ButtonStyle.blurple, custom_id='tickets_view_faq')
+    async def support_faq(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        await ctx.send(content=" ", ephemeral=True, view=FAQView())
+
     @nextcord.ui.button(label='Ticket', style=nextcord.ButtonStyle.blurple, custom_id='tickets_view:create')
     async def create_ticket(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
         with open("ticketinfo.json") as f:
@@ -58,13 +92,14 @@ Please explain any questions you have and a member of staff will help you as soo
             await contmsg.pin()
             await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
             await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
+        
 
 class Tickets(commands.Cog):
 
     def __init__(self, client):
         self.client = client
     
-    @nextcord.slash_command(name="sendticket", description="Send a ticket message to a channel", guild_ids=[926955080010301480])
+    @nextcord.slash_command(name="sendticket", description="Send a ticket message to a channel", guild_ids=[926955080010301480, 801744339343507457])
     async def send_ticket(self,
         ctx : Interaction,
         channel : GuildChannel = SlashOption(
