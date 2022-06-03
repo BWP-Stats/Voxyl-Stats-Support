@@ -1,8 +1,12 @@
-import nextcord, json
+import nextcord, json, pymysql, asyncio
 from nextcord.ext import commands, tasks
 from nextcord import Interaction, SlashOption
 from nextcord.abc import GuildChannel
 from googleapiclient import discovery
+
+invc = 0
+meminvc = []
+beingmoved = []
 
 class SuggestionTypeView(nextcord.ui.View):
     def __init__(self, suggester):
@@ -34,6 +38,12 @@ class Events(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        with open('config.json','r') as jsonfile:
+            configData = json.load(jsonfile)
+            self.DBUSER = configData["DBUSER"]
+            self.DBPASS = configData["DBPASS"]
+            self.DBNAME = configData["DBNAME"]
+            self.DBENDPOINT = configData["DBENDPOINT"]
         
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -130,6 +140,65 @@ class Events(commands.Cog):
         except Exception as e:
             print(e)
             pass
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before=None, after=None):
+        global invc, beingmoved
+        if before.channel:
+            if before.channel.category.id == 982291594856255518 and not before.channel.id == 982291673310720082:
+                if len(before.channel.members) == 0:
+                    conn = pymysql.connect(host=self.DBENDPOINT, port=3306, user=self.DBUSER, password=self.DBPASS, db=self.DBNAME)
+                    cur = conn.cursor()
+                    cur.execute(f"SELECT * FROM private_calls WHERE channel='{before.channel.id}'")
+                    data=cur.fetchall()
+                    cur.execute(f"DELETE FROM private_calls WHERE channel='{before.channel.id}'")
+                    conn.commit()
+                    await before.channel.delete()
+                    textchannel = before.channel.guild.get_channel(int(data[0][2]))
+                    await textchannel.delete()
+        if after.channel:
+            if after.channel.id == 982291673310720082:
+                if len(after.channel.members) >= 0:
+                    conn = pymysql.connect(host=self.DBENDPOINT, port=3306, user=self.DBUSER, password=self.DBPASS, db=self.DBNAME)
+                    cur = conn.cursor()
+                    cur.execute(f"SELECT * FROM private_calls WHERE owner='{member.id}'")
+                    data = cur.fetchall()
+                    if data:
+                        currentchannel = after.channel.guild.get_channel(int(data[0][1]))
+                        await member.move_to(currentchannel)
+                        currenttext = after.channel.guild.get_channel(int(data[0][2]))
+                        await currenttext.send(f"{member.mention} You have been moved to {currentchannel.mention} as it is the channel you currently own. To make a new channel please transfer this channnel to someone else using `/vc transfer`.")
+                    else:
+                        category = after.channel.guild.get_channel(982291594856255518)
+                        vcchannel = await after.channel.guild.create_voice_channel(name=f"{member.name}'s Private", category=category)
+                        textchannel = await after.channel.guild.create_text_channel(name=f"priv-{member.name}", category=category)
+                        cur.execute(f"INSERT INTO private_calls (owner, channel, text) VALUES ('{member.id}', '{vcchannel.id}', '{textchannel.id}')")
+                        conn.commit()
+                        await vcchannel.set_permissions(member, view_channel=True, connect=True, speak=True)
+                        await textchannel.set_permissions(member, view_channel=True, send_messages=True, read_messages=True)
+                        try:
+                            await member.move_to(vcchannel)
+                            await after.channel.set_permissions(member, connect=False)
+                            embed=nextcord.Embed(title=f"Private Channel", description=f"""Welcome to your private Voice & Text Channel. You can do whatever you want here (within the rules) without anyone disturbing you. Before are a list of commands you can use to manage your private channels:
+                        
+`/vc invite <member>` - Invite a member to join your channels
+`/vc block <member>` - Block a member from your channels
+`/vc public` - Make your **voice** channel public. (Won't affect your text channel)
+`/vc private` - Make your **voice** channel private so only people you invite can join""")
+                            embed.set_footer(text="Private channels from Voxyl Stats")
+                            await textchannel.send(f"{member.mention}", embed=embed)
+                            await asyncio.sleep(10)
+                            await after.channel.set_permissions(member, overwrite=None)
+                        except:
+                            cur.execute(f"DELETE FROM private_calls WHERE channel='{vcchannel.id}'")
+                            conn.commit()
+                            await vcchannel.delete()
+                            await textchannel.delete()
+                            await after.channel.set_permissions(member, connect=False)
+                            await asyncio.sleep(10)
+                            await after.channel.set_permissions(member, overwrite=None)
+                            return
+
 
 
 def setup(client):
