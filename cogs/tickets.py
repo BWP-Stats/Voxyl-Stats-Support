@@ -43,22 +43,26 @@ class TicketManagementView(nextcord.ui.View):
         with open("ticketinfo.json") as f:
             data=json.load(f)
         ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
-        del data["channels"][f"{ctx.channel.id}"]
-        index = data["users"].index(ownerid)
-        del data["users"][index]
-        with open("ticketinfo.json", "w") as f:
-            json.dump(data, f)
-        logchannel = ctx.guild.get_channel(927304057931038800)
-        sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
-        async for message in ctx.channel.history(oldest_first = True):
-            print(f"{message.author}: {message.content}")
+        role = ctx.guild.get_role(926955425704869938)
+        if str(ctx.user.id) == (ownerid) or role in ctx.user.roles:
+            del data["channels"][f"{ctx.channel.id}"]
+            index = data["users"].index(ownerid)
+            del data["users"][index]
+            with open("ticketinfo.json", "w") as f:
+                json.dump(data, f)
+            logchannel = ctx.guild.get_channel(927304057931038800)
+            sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
+            async for message in ctx.channel.history(oldest_first = True):
+                print(f"{message.author}: {message.content}")
 
-        message = await ctx.channel.history().flatten()
-        sys.stdout.close()
-        embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
-        await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
-        os.remove(f"ticket-transcript-{ownerid}.txt")
-        await ctx.channel.delete()
+            message = await ctx.channel.history().flatten()
+            sys.stdout.close()
+            embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
+            await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+            os.remove(f"ticket-transcript-{ownerid}.txt")
+            await ctx.channel.delete()
+        else:
+            await ctx.send("You are not the owner of this ticket.", ephemeral=True)
 
 
 class TicketsView(nextcord.ui.View):
@@ -204,6 +208,37 @@ Please explain any questions you have and a member of staff will help you as soo
                 await ctx.send(f"{user.mention} has been removed from the ticket")
                 return
         await ctx.send("You can't do that here", ephemeral=True)
+
+    @tickets.subcommand(name="close", description="Close a ticket")
+    async def tickets_close(self, ctx: Interaction):
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        role = ctx.guild.get_role(926955425704869938)
+        if ctx.user.id not in data["users"] and role not in ctx.user.roles:
+            await ctx.send("You don't have permission to use that in this channel", ephemeral=True)
+            return
+        for channel in data["channels"]:
+            if str(channel) == str(ctx.channel.id) and (ctx.user.id == data["channels"][channel]["ownerid"] or role in ctx.user.roles):
+                ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
+                del data["channels"][f"{ctx.channel.id}"]
+                index = data["users"].index(ownerid)
+                del data["users"][index]
+                with open("ticketinfo.json", "w") as f:
+                    json.dump(data, f)
+                logchannel = ctx.guild.get_channel(978381717352095775)
+                sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
+                async for message in ctx.channel.history(oldest_first = True):
+                    print(f"{message.author}: {message.content}")
+
+                message = await ctx.channel.history().flatten()
+                sys.stdout.close()
+                embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
+                await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+                os.remove(f"ticket-transcript-{ownerid}.txt")
+                await ctx.channel.delete()
+                return
+        await ctx.send("You can't do that here", ephemeral=True)
+
 
         
 
