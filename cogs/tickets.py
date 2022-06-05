@@ -161,6 +161,28 @@ Please explain any questions you have and a member of staff will help you as soo
             await contmsg.pin()
             await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
             await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
+
+    @tickets.subcommand(name="add", description="Add a user to a ticket")
+    async def tickets_add(self,
+        ctx: Interaction,
+        user: nextcord.Member = SlashOption(
+            name="user",
+            description="User to add to the ticket",
+            required=True
+        )):
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        role = ctx.guild.get_role(926955425704869938)
+        if ctx.user.id not in data["users"] and role not in ctx.user.roles:
+            await ctx.send("You don't have permission to use that in this channel", ephemeral=True)
+            return
+        for channel in data["channels"]:
+            if str(channel) == str(ctx.channel.id):
+                await ctx.channel.set_permissions(user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+                await ctx.send(f"{user.mention} has been added to the ticket")
+                return
+        await ctx.send("You can't do that here", ephemeral=True)
+
         
 
 
