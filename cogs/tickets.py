@@ -114,6 +114,53 @@ class Tickets(commands.Cog):
             await ctx.send("Embed sent", ephemeral=True)
         else:
             await ctx.send("You don't have permission to use that", ephemeral=True)
+
+    @nextcord.slash_command(name="tickets", description=f"Base ticket cmd")
+    async def tickets(ctx: Interaction):
+        pass
+
+    @tickets.subcommand(name="faq", description="FAQ for tickets")
+    async def tickets_faq(
+        self,
+        ctx: Interaction,
+        faq: str = SlashOption(
+            name="faq",
+            description="Which FAQ do you want to send?",
+            required=False,
+            choices={"Discord Bot": "bot", "Overlay": "overlay", "Website": "web", "In-game Bot": "igbot"}
+        )
+    ):
+        if faq:
+            with open("config.json", "r") as f:
+                data=json.load(f)
+            faqtosend = data[str(faq)]
+            await ctx.send(faqtosend)
+            return
+        await ctx.send(content=" ", view=FAQView())
+    
+    @tickets.subcommand(name="create", description="Create a ticket")
+    async def tickets_create(self, ctx: Interaction):
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        else:
+            await ctx.response.defer(with_message=True, ephemeral=True)
+            data["users"].append(ctx.user.id)
+            supcat = ctx.guild.get_channel(927304036078723122)
+            channel = await ctx.guild.create_text_channel(name=f"support-{ctx.user.id}", category=supcat)
+            channels = data["channels"]
+            channels[channel.id] = {"ownerid" : ctx.user.id}
+            with open("ticketinfo.json", "w") as f:
+                json.dump(data, f)
+            embed=nextcord.Embed(title="Support", description=f"""Welcome to your ticket {ctx.user.mention}
+            
+Please explain any questions you have and a member of staff will help you as soon as possible""")
+            contmsg = await channel.send(f"{ctx.user.mention}", embed=embed, view=TicketManagementView())
+            await contmsg.pin()
+            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+            await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
         
 
 
