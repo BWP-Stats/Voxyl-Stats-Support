@@ -44,7 +44,7 @@ class TicketManagementView(nextcord.ui.View):
             data=json.load(f)
         ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
         role = ctx.guild.get_role(926955425704869938)
-        if str(ctx.user.id) == (ownerid) or role in ctx.user.roles:
+        if str(ctx.user.id) == str(ownerid) or role in ctx.user.roles:
             del data["channels"][f"{ctx.channel.id}"]
             index = data["users"].index(ownerid)
             del data["users"][index]
