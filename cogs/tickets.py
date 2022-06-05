@@ -225,7 +225,7 @@ Please explain any questions you have and a member of staff will help you as soo
                 del data["users"][index]
                 with open("ticketinfo.json", "w") as f:
                     json.dump(data, f)
-                logchannel = ctx.guild.get_channel(978381717352095775)
+                logchannel = ctx.guild.get_channel(927304057931038800)
                 sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
                 async for message in ctx.channel.history(oldest_first = True):
                     print(f"{message.author}: {message.content}")
