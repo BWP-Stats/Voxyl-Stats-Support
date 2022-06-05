@@ -183,6 +183,28 @@ Please explain any questions you have and a member of staff will help you as soo
                 return
         await ctx.send("You can't do that here", ephemeral=True)
 
+    
+    @tickets.subcommand(name="remove", description="Remove a user from a ticket")
+    async def tickets_remove(self,
+        ctx: Interaction,
+        user: nextcord.Member = SlashOption(
+            name="user",
+            description="User to remove from the ticket",
+            required=True
+        )):
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        role = ctx.guild.get_role(926955425704869938)
+        if ctx.user.id not in data["users"] and role not in ctx.user.roles:
+            await ctx.send("You don't have permission to use that in this channel", ephemeral=True)
+            return
+        for channel in data["channels"]:
+            if str(channel) == str(ctx.channel.id) and (ctx.user.id == data["channels"][channel]["ownerid"] or role in ctx.user.roles):
+                await ctx.channel.set_permissions(user, send_messages=False, read_messages=False, attach_files=False, embed_links=False)
+                await ctx.send(f"{user.mention} has been removed from the ticket")
+                return
+        await ctx.send("You can't do that here", ephemeral=True)
+
         
 
 
