@@ -53,7 +53,7 @@ class TicketManagementView(nextcord.ui.View):
             logchannel = ctx.guild.get_channel(984142219520933969)
             f = open(f"ticket-transcript-{ownerid}.txt", "a")
             async for message in ctx.channel.history(oldest_first = True):
-                f.writelines(f"[{message.created_at.strftime('%d-%m-%Y %H:%M:%S')}] {message.author}: {message.content}\n")
+                f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
 
             message = await ctx.channel.history().flatten()
             f.close()
