@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands, tasks
 from nextcord import Interaction, SlashOption
 from nextcord.abc import GuildChannel
-import json, sys, os
+import json, sys, os, io
 
 class FAQView(nextcord.ui.View):
     def __init__(self):
@@ -38,7 +38,7 @@ class TicketManagementView(nextcord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @nextcord.ui.button(label="close", style=nextcord.ButtonStyle.red, custom_id="ticket_management_view:close")
+    @nextcord.ui.button(label="Close", style=nextcord.ButtonStyle.red, custom_id="ticket_management_view:close")
     async def close_ticket(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
         with open("ticketinfo.json") as f:
             data=json.load(f)
@@ -50,15 +50,15 @@ class TicketManagementView(nextcord.ui.View):
             del data["users"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
-            logchannel = ctx.guild.get_channel(927304057931038800)
-            sys.stdout = open(f"ticket-transcript-{ownerid}.txt", "w+")
+            logchannel = ctx.guild.get_channel(984142219520933969)
+            f = open(f"ticket-transcript-{ownerid}.txt", "a")
             async for message in ctx.channel.history(oldest_first = True):
-                print(f"{message.author}: {message.content}")
+                f.writelines(f"[{message.created_at.strftime('%d-%m-%Y %H:%M:%S')}] {message.author}: {message.content}\n")
 
             message = await ctx.channel.history().flatten()
-            sys.stdout.close()
+            f.close()
             embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
-            await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+            await logchannel.send(embed=embed, files=[nextcord.File(f"ticket-transcript-{ownerid}.txt")])
             os.remove(f"ticket-transcript-{ownerid}.txt")
             await ctx.channel.delete()
         else:
@@ -75,13 +75,15 @@ class TicketsView(nextcord.ui.View):
 
     @nextcord.ui.button(label='Ticket', style=nextcord.ButtonStyle.blurple, custom_id='tickets_view:create')
     async def create_ticket(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        await ctx.response.defer(with_message=True, ephemeral=True)
         with open("ticketinfo.json") as f:
             data=json.load(f)
         if ctx.user.id in data["users"]:
             await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
             return
         else:
-            await ctx.response.defer(with_message=True, ephemeral=True)
+            msg = await ctx.send("Loading ticket...")
+
             data["users"].append(ctx.user.id)
             supcat = ctx.guild.get_channel(927304036078723122)
             channel = await ctx.guild.create_text_channel(name=f"support-{ctx.user.id}", category=supcat)
@@ -92,10 +94,10 @@ class TicketsView(nextcord.ui.View):
             embed=nextcord.Embed(title="Support", description=f"""Welcome to your ticket {ctx.user.mention}
             
 Please explain any questions you have and a member of staff will help you as soon as possible""")
+            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+            await msg.edit(f"Ticket created in {channel.mention}")
             contmsg = await channel.send(f"{ctx.user.mention}", embed=embed, view=TicketManagementView())
             await contmsg.pin()
-            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
-            await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
         
 
 class Tickets(commands.Cog):

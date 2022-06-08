@@ -47,6 +47,8 @@ class Events(commands.Cog):
         
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.type is nextcord.MessageType.pins_add and message.author.id == self.client.user.id:
+            await message.delete()
         if message.channel.id == 965352171040276500 or message.channel.id == 965360224003326033:
             await message.publish()
         else:
