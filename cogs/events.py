@@ -52,7 +52,8 @@ class Events(commands.Cog):
         if message.channel.id == 965352171040276500 or message.channel.id == 965360224003326033:
             await message.publish()
         else:
-            if message.author.id == self.client.user.id:
+            role = message.guild.get_role(926955425704869938)
+            if message.author.id == self.client.user.id or role in message.author.roles:
                 return
             with open("config.json") as f:
                 data = json.load(f)
