@@ -37,18 +37,12 @@ class Dropdown(nextcord.ui.Select):
 
     async def callback(self, ctx: nextcord.Interaction):
         await ctx.response.defer(with_message=False)
-        """announcements = ctx.guild.get_role(927195791553101825)
+        announcements = ctx.guild.get_role(927195791553101825)
         updates = ctx.guild.get_role(927195836046254091)
         downtime = ctx.guild.get_role(927597867231748186)
         giveaway = ctx.guild.get_role(929423518456750122)
         poll = ctx.guild.get_role(928361908409610291)
-        sneak_peak = ctx.guild.get_role(929440986814382141)"""
-        announcements = ctx.guild.get_role(858762299933589524)
-        updates = ctx.guild.get_role(888171960054448178)
-        downtime = ctx.guild.get_role(869254172904656986)
-        giveaway = ctx.guild.get_role(905862240043933786)
-        poll = ctx.guild.get_role(931597869343973397)
-        sneak_peak = ctx.guild.get_role(985157847862116412)
+        sneak_peak = ctx.guild.get_role(929440986814382141)
         adding = []
         removing = []
         if "Announcement Pings" in self.values:
@@ -83,12 +77,12 @@ class RoleClearButton(nextcord.ui.Button):
         super().__init__(label="Clear Roles", custom_id="clearroles", style=nextcord.ButtonStyle.red)
     
     async def callback(self, ctx: nextcord.Interaction):
-        announcements = ctx.guild.get_role(858762299933589524)
-        updates = ctx.guild.get_role(888171960054448178)
-        downtime = ctx.guild.get_role(869254172904656986)
-        giveaway = ctx.guild.get_role(905862240043933786)
-        poll = ctx.guild.get_role(931597869343973397)
-        sneak_peak = ctx.guild.get_role(985157847862116412)
+        announcements = ctx.guild.get_role(927195791553101825)
+        updates = ctx.guild.get_role(927195836046254091)
+        downtime = ctx.guild.get_role(927597867231748186)
+        giveaway = ctx.guild.get_role(929423518456750122)
+        poll = ctx.guild.get_role(928361908409610291)
+        sneak_peak = ctx.guild.get_role(929440986814382141)
         removing = [announcements, updates, downtime, giveaway, poll, sneak_peak]
         await ctx.user.remove_roles(*removing, atomic=False)
 class RoleAddButton(nextcord.ui.Button):
@@ -96,12 +90,12 @@ class RoleAddButton(nextcord.ui.Button):
         super().__init__(label="Add All Roles", custom_id="addroles", style=nextcord.ButtonStyle.green)
     
     async def callback(self, ctx: nextcord.Interaction):
-        announcements = ctx.guild.get_role(858762299933589524)
-        updates = ctx.guild.get_role(888171960054448178)
-        downtime = ctx.guild.get_role(869254172904656986)
-        giveaway = ctx.guild.get_role(905862240043933786)
-        poll = ctx.guild.get_role(931597869343973397)
-        sneak_peak = ctx.guild.get_role(985157847862116412)
+        announcements = ctx.guild.get_role(927195791553101825)
+        updates = ctx.guild.get_role(927195836046254091)
+        downtime = ctx.guild.get_role(927597867231748186)
+        giveaway = ctx.guild.get_role(929423518456750122)
+        poll = ctx.guild.get_role(928361908409610291)
+        sneak_peak = ctx.guild.get_role(929440986814382141)
         adding = [announcements, updates, downtime, giveaway, poll, sneak_peak]
         await ctx.user.add_roles(*adding, atomic=False)
 
