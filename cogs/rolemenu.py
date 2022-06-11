@@ -18,7 +18,7 @@ class Dropdown(nextcord.ui.Select):
                 label="Downtime Pings", description="Get mentioned when there is any downtime with a system"
             ),
             nextcord.SelectOption(
-                label="Giveaway Pings", description="Gte mentioned when there is a giveaway"
+                label="Giveaway Pings", description="Get mentioned when there is a giveaway"
             ),
             nextcord.SelectOption(
                 label="Poll Pings", description="Get mentioned when we run a poll"
