@@ -68,9 +68,11 @@ class TicketTopicChooser(nextcord.ui.View):
     def __init__(self, channel):
         super().__init__(timeout=300)
         self.channel = channel
+        self.selected = False
 
     @nextcord.ui.button(label="Discord Bot", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_discord_bot")
     async def ticket_type_discord_bot(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        self.selected = True
         role = ctx.guild.get_role(927171247467536384)
         await ctx.channel.edit(name=f"discordbot-{ctx.user.id}")
         await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
@@ -82,6 +84,7 @@ Please explain any questions you have and a member of staff will help you as soo
         await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
     @nextcord.ui.button(label="Overlay", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_overlay")
     async def ticket_type_overlay(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        self.selected = True
         role = ctx.guild.get_role(927171215234330705)
         await ctx.channel.edit(name=f"overlay-{ctx.user.id}")
         await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
@@ -93,6 +96,7 @@ Please explain any questions you have and a member of staff will help you as soo
         await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
     @nextcord.ui.button(label="Website", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_website")
     async def ticket_type_website(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        self.selected = True
         role = ctx.guild.get_role(927171191268081675)
         await ctx.channel.edit(name=f"website-{ctx.user.id}")
         await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
@@ -104,6 +108,7 @@ Please explain any questions you have and a member of staff will help you as soo
         await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
     @nextcord.ui.button(label="In-game Bot", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_igbot")
     async def ticket_type_igbot(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        self.selected = True
         role = ctx.guild.get_role(967515197348663326)
         await ctx.channel.edit(name=f"ingame-bot-{ctx.user.id}")
         await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
@@ -115,6 +120,7 @@ Please explain any questions you have and a member of staff will help you as soo
         await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
     @nextcord.ui.button(label="Other", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_other")
     async def ticket_type_other(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
+        self.selected = True
         await ctx.channel.edit(name=f"other-{ctx.user.id}")
         embed=nextcord.Embed(title="Support", description=f"""Welcome to your Other support ticket {ctx.user.mention}
 
@@ -122,25 +128,26 @@ Please explain any questions you have and a member of staff will help you as soo
         await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
 
     async def on_timeout(self):
-        with open("ticketinfo.json") as f:
-            data=json.load(f)
-        ownerid = data["channels"][f"{str(self.channel.id)}"]["ownerid"]
-        del data["channels"][f"{str(self.channel.id)}"]
-        index = data["users"].index(ownerid)
-        del data["users"][index]
-        with open("ticketinfo.json", "w") as f:
-            json.dump(data, f)
-        logchannel = self.channel.guild.get_channel(927304057931038800)
-        f = open(f"ticket-transcript-{ownerid}.txt", "a")
-        async for message in self.channel.history(oldest_first = True):
-            f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
+        if self.selected == False:
+            with open("ticketinfo.json") as f:
+                data=json.load(f)
+            ownerid = data["channels"][f"{str(self.channel.id)}"]["ownerid"]
+            del data["channels"][f"{str(self.channel.id)}"]
+            index = data["users"].index(ownerid)
+            del data["users"][index]
+            with open("ticketinfo.json", "w") as f:
+                json.dump(data, f)
+            logchannel = self.channel.guild.get_channel(927304057931038800)
+            f = open(f"ticket-transcript-{ownerid}.txt", "a")
+            async for message in self.channel.history(oldest_first = True):
+                f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
 
-        message = await self.channel.history().flatten()
-        f.close()
-        embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@930165085073207358> (930165085073207358)\nCreated By <@{ownerid}> ({ownerid})")
-        await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
-        os.remove(f"ticket-transcript-{ownerid}.txt")
-        await self.channel.delete()
+            message = await self.channel.history().flatten()
+            f.close()
+            embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@930165085073207358> (930165085073207358)\nCreated By <@{ownerid}> ({ownerid})")
+            await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+            os.remove(f"ticket-transcript-{ownerid}.txt")
+            await self.channel.delete()
 
 
 
