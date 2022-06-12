@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands, tasks
 from nextcord import Interaction, SlashOption
 from nextcord.abc import GuildChannel
-import json, sys, os
+import json, sys, os, asyncio
 
 class FAQView(nextcord.ui.View):
     def __init__(self):
@@ -35,8 +35,9 @@ class FAQView(nextcord.ui.View):
 
 
 class TicketManagementView(nextcord.ui.View):
-    def __init__(self):
+    def __init__(self, disabled: bool = False):
         super().__init__(timeout=None)
+        self.disabled = disabled
 
     @nextcord.ui.button(label="Close", style=nextcord.ButtonStyle.red, custom_id="ticket_management_view:close")
     async def close_ticket(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
@@ -45,21 +46,46 @@ class TicketManagementView(nextcord.ui.View):
         ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
         role = ctx.guild.get_role(926955425704869938)
         if str(ctx.user.id) == str(ownerid) or role in ctx.user.roles:
+            await ctx.message.edit(view=None)
+            embed = nextcord.Embed(title="", description="Removing ticket from database")
+            msg = await ctx.channel.send(embed=embed)
             del data["channels"][f"{ctx.channel.id}"]
             index = data["users"].index(ownerid)
             del data["users"][index]
             with open("ticketinfo.json", "w") as f:
                 json.dump(data, f)
-            logchannel = ctx.guild.get_channel(927304057931038800)
+            print(msg)
+            embed=nextcord.Embed(title="", description="Ticket removed from database")
+            await msg.edit(embed=embed)
+            embedtranscript1=nextcord.Embed(title="", description="Loading ticket transcript", colour=0xFFA500)
+            msg = await ctx.channel.send(content="Ticket closing log", embed=embedtranscript1)
+            embedtranscript2=nextcord.Embed(title="", description="Ticket transcript loaded", colour=0x00FF00)
+            logchannel = ctx.guild.get_channel(984142215179829328)
+            embedtranscript3=nextcord.Embed(title="", description=f"Sending transcript to {logchannel.mention}", colour=0xFFA500)
+            embedtranscript4=nextcord.Embed(title="", description=f"Sending transcript to <@{ownerid}>", colour=0xFFA500)
+            embedtranscript5=nextcord.Embed(title="", description=f"Sent transcript to {logchannel.mention}", colour=0x00FF00)
+            embedtranscript6=nextcord.Embed(title="", description=f"Sent transcript to <@{ownerid}>", colour=0x00FF00)
+            embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in 5 seconds", colour=0xFF0000)
             f = open(f"ticket-transcript-{ownerid}.txt", "a")
             async for message in ctx.channel.history(oldest_first = True):
                 f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
 
             message = await ctx.channel.history().flatten()
             f.close()
-            embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
+            await msg.edit(embeds=[embedtranscript2, embedtranscript3, embedtranscript4])
+            embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreated By <@{ownerid}> ({ownerid})")
             await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+            try:
+                member = ctx.guild.get_member(int(ownerid))
+                embed=nextcord.Embed(title="Ticket closed", description=f"Your ticket has been closed by the staff team. The transcript is attached above")
+                await member.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+            except Exception as e:
+                print(e)
+                embedtranscript6 = nextcord.Embed(title="", description="Could not send transcript to owner", colour=0xFF0000)
+                pass
+            await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
             os.remove(f"ticket-transcript-{ownerid}.txt")
+            await asyncio.sleep(5)
             await ctx.channel.delete()
         else:
             await ctx.send("You are not the owner of this ticket.", ephemeral=True)
@@ -303,22 +329,47 @@ class Tickets(commands.Cog):
             return
         for channel in data["channels"]:
             if str(channel) == str(ctx.channel.id) and (ctx.user.id == data["channels"][channel]["ownerid"] or role in ctx.user.roles):
-                ownerid = data["channels"][f"{ctx.channel.id}"]["ownerid"]
+                await ctx.response.defer(ephemeral=True)
+                ownerid = data["channels"][channel]["ownerid"]
+                embed = nextcord.Embed(title="", description="Removing ticket from database")
+                msg = await ctx.channel.send(embed=embed)
                 del data["channels"][f"{ctx.channel.id}"]
                 index = data["users"].index(ownerid)
                 del data["users"][index]
                 with open("ticketinfo.json", "w") as f:
                     json.dump(data, f)
-                logchannel = ctx.guild.get_channel(927304057931038800)
+                print(msg)
+                embed=nextcord.Embed(title="", description="Ticket removed from database")
+                await msg.edit(embed=embed)
+                embedtranscript1=nextcord.Embed(title="", description="Loading ticket transcript", colour=0xFFA500)
+                msg = await ctx.channel.send(content="Ticket closing log", embed=embedtranscript1)
+                embedtranscript2=nextcord.Embed(title="", description="Ticket transcript loaded", colour=0x00FF00)
+                logchannel = ctx.guild.get_channel(984142215179829328)
+                embedtranscript3=nextcord.Embed(title="", description=f"Sending transcript to {logchannel.mention}", colour=0xFFA500)
+                embedtranscript4=nextcord.Embed(title="", description=f"Sending transcript to <@{ownerid}>", colour=0xFFA500)
+                embedtranscript5=nextcord.Embed(title="", description=f"Sent transcript to {logchannel.mention}", colour=0x00FF00)
+                embedtranscript6=nextcord.Embed(title="", description=f"Sent transcript to <@{ownerid}>", colour=0x00FF00)
+                embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in 5 seconds", colour=0xFF0000)
                 f = open(f"ticket-transcript-{ownerid}.txt", "a")
                 async for message in ctx.channel.history(oldest_first = True):
                     f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
 
                 message = await ctx.channel.history().flatten()
                 f.close()
-                embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreate By <@{ownerid}> ({ownerid})")
+                await msg.edit(embeds=[embedtranscript2, embedtranscript3, embedtranscript4])
+                embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@{ctx.user.id}> ({ctx.user.id})\nCreated By <@{ownerid}> ({ownerid})")
                 await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+                try:
+                    member = ctx.guild.get_member(int(ownerid))
+                    embed=nextcord.Embed(title="Ticket closed", description=f"Your ticket has been closed by the staff team. The transcript is attached above")
+                    await member.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
+                except Exception as e:
+                    print(e)
+                    embedtranscript6 = nextcord.Embed(title="", description="Could not send transcript to owner", colour=0xFF0000)
+                    pass
+                await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
                 os.remove(f"ticket-transcript-{ownerid}.txt")
+                await asyncio.sleep(5)
                 await ctx.channel.delete()
                 return
         await ctx.send("You can't do that here", ephemeral=True)
