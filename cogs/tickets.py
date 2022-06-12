@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands, tasks
 from nextcord import Interaction, SlashOption
 from nextcord.abc import GuildChannel
-import json, sys, os, asyncio
+import json, sys, os, asyncio, time
 
 class FAQView(nextcord.ui.View):
     def __init__(self):
@@ -65,7 +65,6 @@ class TicketManagementView(nextcord.ui.View):
             embedtranscript4=nextcord.Embed(title="", description=f"Sending transcript to <@{ownerid}>", colour=0xFFA500)
             embedtranscript5=nextcord.Embed(title="", description=f"Sent transcript to {logchannel.mention}", colour=0x00FF00)
             embedtranscript6=nextcord.Embed(title="", description=f"Sent transcript to <@{ownerid}>", colour=0x00FF00)
-            embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in 5 seconds", colour=0xFF0000)
             f = open(f"ticket-transcript-{ownerid}.txt", "a")
             async for message in ctx.channel.history(oldest_first = True):
                 f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
@@ -83,8 +82,9 @@ class TicketManagementView(nextcord.ui.View):
                 print(e)
                 embedtranscript6 = nextcord.Embed(title="", description="Could not send transcript to owner", colour=0xFF0000)
                 pass
-            await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
             os.remove(f"ticket-transcript-{ownerid}.txt")
+            embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in <t:{round(time.time())+6}:R>", colour=0xFF0000)
+            await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
             await asyncio.sleep(5)
             await ctx.channel.delete()
         else:
@@ -349,7 +349,6 @@ class Tickets(commands.Cog):
                 embedtranscript4=nextcord.Embed(title="", description=f"Sending transcript to <@{ownerid}>", colour=0xFFA500)
                 embedtranscript5=nextcord.Embed(title="", description=f"Sent transcript to {logchannel.mention}", colour=0x00FF00)
                 embedtranscript6=nextcord.Embed(title="", description=f"Sent transcript to <@{ownerid}>", colour=0x00FF00)
-                embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in 5 seconds", colour=0xFF0000)
                 f = open(f"ticket-transcript-{ownerid}.txt", "a")
                 async for message in ctx.channel.history(oldest_first = True):
                     f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
@@ -367,8 +366,9 @@ class Tickets(commands.Cog):
                     print(e)
                     embedtranscript6 = nextcord.Embed(title="", description="Could not send transcript to owner", colour=0xFF0000)
                     pass
-                await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
                 os.remove(f"ticket-transcript-{ownerid}.txt")
+                embedtranscript7=nextcord.Embed(title="", description=f"Deleting channel in <t:{round(time.time)+5}:R>", colour=0xFF0000)
+                await msg.edit(embeds=[embedtranscript2, embedtranscript5, embedtranscript6, embedtranscript7])
                 await asyncio.sleep(5)
                 await ctx.channel.delete()
                 return
