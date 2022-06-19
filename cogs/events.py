@@ -52,6 +52,22 @@ class Events(commands.Cog):
         if message.channel.id == 965352171040276500 or message.channel.id == 965360224003326033:
             await message.publish()
         else:
+            with open("afk.json", "r") as f:
+                afk_users = json.load(f)
+            if str(message.author.id) in afk_users["users"]:
+                index = afk_users["users"].index(str(message.author.id))
+                del afk_users["users"][index]
+                await message.author.edit(nick=message.author.nick.replace("[AFK] ", "") if message.author.nick != None and message.author.nick.startswith("[AFK] ") else None)
+                with open("afk.json", "w+") as f:
+                    json.dump(afk_users, f)
+                await message.reply("You have been removed from AFK because you sent a message.")
+
+            if message.mentions:
+                with open("afk.json", "r") as f:
+                    afk_users = json.load(f)["users"]
+                for mentioned in message.mentions:
+                    if str(mentioned.id) in afk_users and (message.author.bot == False or mentioned.id != message.author.id):
+                        await message.channel.send(f"{message.author.mention}, **{mentioned}** is currently AFK")
             role = message.guild.get_role(926955425704869938)
             if message.author.id == self.client.user.id or role in message.author.roles:
                 return
@@ -143,6 +159,8 @@ class Events(commands.Cog):
         except Exception as e:
             print(e)
             pass
+
+
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before=None, after=None):
