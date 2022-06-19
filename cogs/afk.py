@@ -18,7 +18,7 @@ class Afk(commands.Cog):
             data=json.load(f)
         if not str(ctx.user.id) in data["users"]:
             data["users"].append(str(ctx.user.id))
-            await ctx.user.edit(nick=f"[AFK]" + ctx.user.nick if ctx.user.nick != None else "[AFK] " + ctx.user.name)
+            await ctx.user.edit(nick=f"[AFK] " + ctx.user.nick if ctx.user.nick != None else "[AFK] " + ctx.user.name)
             with open("afk.json", "w+") as f:
                 json.dump(data, f)
             await ctx.send("Your are now **AFK**. Redo this command to cancel this")
