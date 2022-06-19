@@ -52,6 +52,8 @@ class Events(commands.Cog):
         if message.channel.id == 965352171040276500 or message.channel.id == 965360224003326033:
             await message.publish()
         else:
+            if message.author.bot:
+                return
             with open("afk.json", "r") as f:
                 afk_users = json.load(f)
             if str(message.author.id) in afk_users["users"]:
@@ -66,7 +68,7 @@ class Events(commands.Cog):
                 with open("afk.json", "r") as f:
                     afk_users = json.load(f)["users"]
                 for mentioned in message.mentions:
-                    if str(mentioned.id) in afk_users and (message.author.bot == False or mentioned.id != message.author.id):
+                    if str(mentioned.id) in afk_users and mentioned.id != message.author.id:
                         await message.channel.send(f"{message.author.mention}, **{mentioned}** is currently AFK")
             role = message.guild.get_role(926955425704869938)
             if message.author.id == self.client.user.id or role in message.author.roles:
