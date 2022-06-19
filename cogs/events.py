@@ -187,7 +187,8 @@ class Events(commands.Cog):
 `/vc invite <member>` - Invite a member to join your channels
 `/vc block <member>` - Block a member from your channels
 `/vc public` - Make your **voice** channel public. (Won't affect your text channel)
-`/vc private` - Make your **voice** channel private so only people you invite can join""")
+`/vc private` - Make your **voice** channel private so only people you invite can join
+`/vc transfer <member>` - Transfer ownership of your voice channel to someone else""")
                             embed.set_footer(text="Private channels from Voxyl Stats")
                             await textchannel.send(f"{member.mention}", embed=embed)
                             await asyncio.sleep(10)
