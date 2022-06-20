@@ -207,6 +207,7 @@ class TicketsView(nextcord.ui.View):
             await msg.edit(f"Please select what you need support with in {channel.mention}")
             contmsg = await channel.send(f"{ctx.user.mention} Please select what you need support with by clicking one of the buttons below", view=TicketTopicChooser(channel))
             await contmsg.pin()
+            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
         
 
 class Tickets(commands.Cog):
