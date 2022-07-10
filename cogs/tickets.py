@@ -122,7 +122,7 @@ class TicketTopicChooser(nextcord.ui.View):
 Please explain any questions you have and a member of staff will help you as soon as possible""")
         contmsg = await channel.send(embed=embed, view=TicketManagementView())
         await contmsg.pin()
-        role = ctx.guild.get_role(869254172904656986)
+        role = ctx.guild.get_role(927171247467536384)
         await channel.edit(name=f"discordbot-{ctx.user.id}")
         await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
         await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
