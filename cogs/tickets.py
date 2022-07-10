@@ -274,19 +274,7 @@ class Tickets(commands.Cog):
             await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
             return
         else:
-            msg = await ctx.send("Loading ticket...")
-
-            data["users"].append(ctx.user.id)
-            supcat = ctx.guild.get_channel(927304036078723122)
-            channel = await ctx.guild.create_text_channel(name=f"support-{ctx.user.id}", category=supcat)
-            channels = data["channels"]
-            channels[channel.id] = {"ownerid" : ctx.user.id}
-            with open("ticketinfo.json", "w") as f:
-                json.dump(data, f)
-            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
-            await msg.edit(f"Please select what you need support with in {channel.mention}")
-            contmsg = await channel.send(f"{ctx.user.mention} Please select what you need support with by clicking one of the buttons below", view=TicketTopicChooser(channel))
-            await contmsg.pin()
+            msg = await ctx.send("Please select what type of support you need by clicking one of the buttons below.", view=TicketTopicChooser())
 
     @tickets.subcommand(name="add", description="Add a user to a ticket")
     async def tickets_add(self,
