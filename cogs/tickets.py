@@ -91,89 +91,113 @@ class TicketManagementView(nextcord.ui.View):
             await ctx.send("You are not the owner of this ticket.", ephemeral=True)
 
 class TicketTopicChooser(nextcord.ui.View):
-    def __init__(self, channel):
-        super().__init__(timeout=300)
-        self.channel = channel
-        self.selected = False
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    async def create_ticket_channel(self, guild, member):
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        data["users"].append(member.id)
+        supcat = guild.get_channel(927304036078723122)
+        channel = await guild.create_text_channel(name=f"support-{member.id}", category=supcat)
+        channels = data["channels"]
+        channels[channel.id] = {"ownerid" : member.id}
+        with open("ticketinfo.json", "w") as f:
+            json.dump(data, f)
+        await channel.set_permissions(member, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+        return channel
+
 
     @nextcord.ui.button(label="Discord Bot", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_discord_bot")
     async def ticket_type_discord_bot(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        self.selected = True
-        role = ctx.guild.get_role(927171247467536384)
-        await ctx.channel.edit(name=f"discordbot-{ctx.user.id}")
-        await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
-        role = ctx.guild.get_role(926955425704869938)
-        await ctx.channel.set_permissions(role, read_messages=False, send_messages=False, add_reactions=False)
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        await ctx.response.defer()
+        channel = await self.create_ticket_channel(ctx.guild, ctx.user)
         embed=nextcord.Embed(title="Support", description=f"""Welcome to your Discord Bot support ticket {ctx.user.mention}
         
 Please explain any questions you have and a member of staff will help you as soon as possible""")
-        await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
+        contmsg = await channel.send(embed=embed, view=TicketManagementView())
+        await contmsg.pin()
+        role = ctx.guild.get_role(869254172904656986)
+        await channel.edit(name=f"discordbot-{ctx.user.id}")
+        await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
+        await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
     @nextcord.ui.button(label="Overlay", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_overlay")
     async def ticket_type_overlay(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        self.selected = True
-        role = ctx.guild.get_role(927171215234330705)
-        await ctx.channel.edit(name=f"overlay-{ctx.user.id}")
-        await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
-        role = ctx.guild.get_role(926955425704869938)
-        await ctx.channel.set_permissions(role, read_messages=False, send_messages=False, add_reactions=False)
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        await ctx.response.defer()
+        channel = await self.create_ticket_channel(ctx.guild, ctx.user)
         embed=nextcord.Embed(title="Support", description=f"""Welcome to your Overlay support ticket {ctx.user.mention}
         
 Please explain any questions you have and a member of staff will help you as soon as possible""")
-        await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
+        contmsg = await channel.send(embed=embed, view=TicketManagementView())
+        await contmsg.pin()
+        role = ctx.guild.get_role(927171215234330705)
+        await channel.edit(name=f"overlay-{ctx.user.id}")
+        await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
+        await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
     @nextcord.ui.button(label="Website", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_website")
     async def ticket_type_website(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        self.selected = True
-        role = ctx.guild.get_role(927171191268081675)
-        await ctx.channel.edit(name=f"website-{ctx.user.id}")
-        await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
-        role = ctx.guild.get_role(926955425704869938)
-        await ctx.channel.set_permissions(role, read_messages=False, send_messages=False, add_reactions=False)
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        await ctx.response.defer()
+        channel = await self.create_ticket_channel(ctx.guild, ctx.user)
         embed=nextcord.Embed(title="Support", description=f"""Welcome to your Website support ticket {ctx.user.mention}
-
+        
 Please explain any questions you have and a member of staff will help you as soon as possible""")
-        await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
+        contmsg = await channel.send(embed=embed, view=TicketManagementView())
+        await contmsg.pin()
+        role = ctx.guild.get_role(927171191268081675)
+        await channel.edit(name=f"website-{ctx.user.id}")
+        await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
+        await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
     @nextcord.ui.button(label="In-game Bot", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_igbot")
     async def ticket_type_igbot(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        self.selected = True
-        role = ctx.guild.get_role(967515197348663326)
-        await ctx.channel.edit(name=f"ingame-bot-{ctx.user.id}")
-        await ctx.channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
-        role = ctx.guild.get_role(926955425704869938)
-        await ctx.channel.set_permissions(role, read_messages=False, send_messages=False, add_reactions=False)
-        embed=nextcord.Embed(title="Support", description=f"""Welcome to your Ingame Bot support ticket {ctx.user.mention}
-
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        await ctx.response.defer()
+        channel = await self.create_ticket_channel(ctx.guild, ctx.user)
+        embed=nextcord.Embed(title="Support", description=f"""Welcome to your In-game Bot support ticket {ctx.user.mention}
+        
 Please explain any questions you have and a member of staff will help you as soon as possible""")
-        await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
+        contmsg = await channel.send(embed=embed, view=TicketManagementView())
+        await contmsg.pin()
+        role = ctx.guild.get_role(967515197348663326)
+        await channel.edit(name=f"ingamebot-{ctx.user.id}")
+        await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
+        await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
     @nextcord.ui.button(label="Other", style=nextcord.ButtonStyle.blurple, custom_id="ticket_topic_other")
     async def ticket_type_other(self, button: nextcord.ui.Button, ctx: nextcord.Interaction):
-        self.selected = True
-        await ctx.channel.edit(name=f"other-{ctx.user.id}")
-        embed=nextcord.Embed(title="Support", description=f"""Welcome to your Other support ticket {ctx.user.mention}
-
+        with open("ticketinfo.json") as f:
+            data=json.load(f)
+        if ctx.user.id in data["users"]:
+            await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
+            return
+        await ctx.response.defer()
+        channel = await self.create_ticket_channel(ctx.guild, ctx.user)
+        embed=nextcord.Embed(title="Support", description=f"""Welcome to your support ticket {ctx.user.mention}
+        
 Please explain any questions you have and a member of staff will help you as soon as possible""")
-        await ctx.response.edit_message(content="", embed=embed, view=TicketManagementView())
-
-    async def on_timeout(self):
-        if self.selected == False:
-            with open("ticketinfo.json") as f:
-                data=json.load(f)
-            ownerid = data["channels"][f"{str(self.channel.id)}"]["ownerid"]
-            del data["channels"][f"{str(self.channel.id)}"]
-            index = data["users"].index(ownerid)
-            del data["users"][index]
-            with open("ticketinfo.json", "w") as f:
-                json.dump(data, f)
-            logchannel = self.channel.guild.get_channel(927304057931038800)
-            f = open(f"ticket-transcript-{ownerid}.txt", "a")
-            async for message in self.channel.history(oldest_first = True):
-                f.writelines(f"[{message.created_at.strftime('%Y-%m-%d %H:%M:%S')}] {message.author}: {message.content}\n")
-
-            message = await self.channel.history().flatten()
-            f.close()
-            embed=nextcord.Embed(title="Ticket closed", description=f"Closed By <@930165085073207358> (930165085073207358)\nCreated By <@{ownerid}> ({ownerid})")
-            await logchannel.send(embed=embed, file=nextcord.File(f"ticket-transcript-{ownerid}.txt"))
-            os.remove(f"ticket-transcript-{ownerid}.txt")
-            await self.channel.delete()
+        contmsg = await channel.send(embed=embed, view=TicketManagementView())
+        await contmsg.pin()
+        role = ctx.guild.get_role(926955425704869938)
+        await channel.edit(name=f"other-{ctx.user.id}")
+        await channel.set_permissions(role, read_messages=True, send_messages=True, add_reactions=True)
+        await ctx.send(f"Ticket created in {channel.mention}", ephemeral=True)
 
 
 
@@ -194,20 +218,7 @@ class TicketsView(nextcord.ui.View):
             await ctx.send("You already have a ticket open. Please use that ticket instead of creating a new one", ephemeral=True)
             return
         else:
-            msg = await ctx.send("Loading ticket...")
-
-            data["users"].append(ctx.user.id)
-            supcat = ctx.guild.get_channel(927304036078723122)
-            channel = await ctx.guild.create_text_channel(name=f"support-{ctx.user.id}", category=supcat)
-            channels = data["channels"]
-            channels[channel.id] = {"ownerid" : ctx.user.id}
-            with open("ticketinfo.json", "w") as f:
-                json.dump(data, f)
-            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
-            await msg.edit(f"Please select what you need support with in {channel.mention}")
-            contmsg = await channel.send(f"{ctx.user.mention} Please select what you need support with by clicking one of the buttons below", view=TicketTopicChooser(channel))
-            await contmsg.pin()
-            await channel.set_permissions(ctx.user, send_messages=True, read_messages=True, attach_files=True, embed_links=True)
+            msg = await ctx.send("Please select what type of support you need by clicking one of the buttons below.", view=TicketTopicChooser())
         
 
 class Tickets(commands.Cog):

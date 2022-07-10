@@ -2,7 +2,6 @@ import nextcord
 import json
 import os
 from cogs.tickets import TicketsView, TicketManagementView, FAQView
-from cogs.verifymessage import VerifyView
 from cogs.rolemenu import RoleMenuView
 from nextcord.ext import commands , tasks
 import requests
@@ -19,7 +18,6 @@ class Bot(commands.Bot):
         if not self.persistent_views_added:
             self.add_view(TicketsView())
             self.add_view(TicketManagementView())
-            self.add_view(VerifyView())
             self.add_view(FAQView())
             self.add_view(RoleMenuView())
             self.persistent_views_added = True
